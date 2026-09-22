@@ -1,0 +1,150 @@
+{
+  "case_id": "CASE_13",
+  "case_title": "Middle-of-the-Night ATM Withdrawal Attempt Exceeding Limits",
+  "transaction_id": "TX_3066701",
+  "trigger": {
+    "type": "risk_score",
+    "initial_risk_score": 0.79,
+    "reason": "PIN failure followed by maximum limit cash withdrawal request at unusual operating hour."
+  },
+  "investigation_record": [
+    {
+      "step": "TRIGGER",
+      "timestamp": "2026-09-22T08:52:36.729295",
+      "details": "Investigation triggered for TX_3066701 via risk_score with initial risk score 0.79"
+    },
+    {
+      "step": "CASE_PROGRESSION",
+      "timestamp": "2026-09-22T08:52:36.731791",
+      "details": "FraudCase CASE_13 recorded in TigerGraph with status INVESTIGATING"
+    },
+    {
+      "step": "EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.734898",
+      "details": "Gathered 1 evidence items from TigerGraph (Ring Size: 0, Subgraph Nodes: 6)"
+    },
+    {
+      "step": "PATTERN_DETECTION",
+      "timestamp": "2026-09-22T08:52:36.737474",
+      "details": "Identified 1 matching typologies. Primary: Card-Not-Present Credential Stuffing & Account Takeover (Calculated Fraud Prob: 0.79)"
+    },
+    {
+      "step": "UNCERTAINTY_ASSESSMENT",
+      "timestamp": "2026-09-22T08:52:36.740131",
+      "details": "Assessed confidence at 74% (MEDIUM). Evidence Gaps: 1. Needs more evidence: True."
+    },
+    {
+      "step": "CONTROLLED_EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.744792",
+      "details": "Dispatched controlled inquiries (REQUEST_CUSTOMER_TRANSACTION_VALIDATION, TRIGGER_STEP_UP_BIOMETRIC_AUTH, QUERY_EXTERNAL_BREACH_INTELLIGENCE). Received response: Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy."
+    },
+    {
+      "step": "ACTION_RECOMMENDATION",
+      "timestamp": "2026-09-22T08:52:36.747109",
+      "details": "Recommended Next Best Action: BLOCK_CARD (Route: ANALYST_TIER_1). SAR Required: False."
+    },
+    {
+      "step": "HUMAN_APPROVAL_GATE",
+      "timestamp": "2026-09-22T08:52:36.748820",
+      "details": "Action 'BLOCK_CARD' escalated to ANALYST_TIER_1 for authorization. Status: APPROVED with audit sign-off."
+    },
+    {
+      "step": "MEMORY_UPDATE",
+      "timestamp": "2026-09-22T08:52:36.751763",
+      "details": "Investigation findings, actions, and vector embedding stored in TigerGraph CaseMemory (MEM_CASE_13). Case marked RESOLVED."
+    }
+  ],
+  "evidence": {
+    "evidence_trail": [
+      {
+        "evidence_id": "EV_GRAPH_01",
+        "source": "TigerGraph_MultiHop",
+        "timestamp": "2026-09-22T08:52:36.734604",
+        "title": "Single Account Entity Association",
+        "description": "No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.",
+        "risk_contribution": -0.1,
+        "data": {
+          "ring_size": 0,
+          "connected_accounts": [],
+          "linked_transactions_count": 0,
+          "shared_devices": [
+            "DEV_ATM_HARDWARE_04"
+          ],
+          "shared_ips": [
+            "10.0.4.12"
+          ]
+        }
+      }
+    ],
+    "graph_ring_size": 0,
+    "connected_accounts": [],
+    "velocity_metrics": {
+      "tx_count": 1,
+      "total_volume": 2000.0,
+      "device_count": 1,
+      "ip_count": 1,
+      "avg_amount": 2000.0
+    },
+    "device_signals": {
+      "device_id": "DEV_ATM_HARDWARE_04",
+      "ip_address": "10.0.4.12",
+      "is_suspicious_fingerprint": false,
+      "device_type": "STANDARD_BROWSER"
+    }
+  },
+  "findings": {
+    "fraud_probability": 0.79,
+    "confidence_score": 0.74,
+    "confidence_level": "MEDIUM",
+    "likely_fraud_type": "Card-Not-Present Credential Stuffing & Account Takeover",
+    "pattern_matches": [
+      {
+        "pattern_id": "PAT-001",
+        "pattern_name": "Card-Not-Present Credential Stuffing & Account Takeover",
+        "typology": "Account Takeover / Automated Attack",
+        "confidence": 0.74,
+        "matched_indicators": [
+          "Out-of-hours ATM / withdrawal attempt exceeding limits"
+        ],
+        "severity": "HIGH"
+      }
+    ],
+    "evidence_gaps": [
+      "Independent verification of customer travel status or device authorization pending"
+    ]
+  },
+  "next_best_action": {
+    "before_additional_evidence": {
+      "action": "SOFT_HOLD_2HR",
+      "rationale": "Elevated risk signals present with high uncertainty. Soft hold and step-up auth requested prior to destructive block.",
+      "required_approval_route": "NONE",
+      "requires_approval": false
+    },
+    "additional_evidence_requested": [
+      "REQUEST_CUSTOMER_TRANSACTION_VALIDATION",
+      "TRIGGER_STEP_UP_BIOMETRIC_AUTH",
+      "QUERY_EXTERNAL_BREACH_INTELLIGENCE"
+    ],
+    "additional_evidence_received": {
+      "source": "Step_Up_MFA_Challenge",
+      "status": "FAILED_NO_RESPONSE",
+      "is_cleared": false,
+      "summary": "Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy.",
+      "timestamp": "2026-09-22T08:52:36.744767"
+    },
+    "after_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Additional evidence confirmed unauthorized access (Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy.). Permanent mitigation required.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    }
+  },
+  "written_to_tigergraph": {
+    "vertex": "FraudCase",
+    "vertex_id": "CASE_13",
+    "status": "RESOLVED",
+    "case_memory_id": "MEM_CASE_13"
+  },
+  "suspicious_activity_report": null,
+  "explainability_narrative": "Investigation opened for Transaction TX_3066701 ($2,000.00 USD) triggered by risk_score. TigerGraph multi-hop analysis identified 0 connected accounts sharing device and network infrastructure. Topological and signature matching flagged primary typology as 'Card-Not-Present Credential Stuffing & Account Takeover' with confidence of 74%. Prior to additional evidence, next-best action was SOFT_HOLD_2HR (Approval: NONE). Additional evidence gathered: 'Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy.'. Post-evidence updated next-best action transitioned to BLOCK_CARD with route ANALYST_TIER_1. "
+}

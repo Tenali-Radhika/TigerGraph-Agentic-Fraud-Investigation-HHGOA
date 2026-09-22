@@ -1,0 +1,171 @@
+// ============================================================================
+// TigerGraph GSQL Schema for Agentic Fraud Investigation (HHGOA Hackathon)
+// Based on IEEE-CIS / Vesta Corporation Transaction & Identity Data Model
+// ============================================================================
+
+DROP GRAPH FraudGraph
+DROP VERTEX Account, Card, Device, IP_Address, Transaction, FraudCase, FraudPattern, FraudPolicy, SAR_Report, CaseMemory, Analyst
+DROP EDGE MADE_TRANSACTION, USED_CARD, ON_DEVICE, FROM_IP, SHARES_DEVICE, SHARES_IP, INVESTIGATED_IN, LINKED_TO_PATTERN, GOVERNED_BY, HAS_SAR, SIMILAR_TO, ASSIGNED_TO
+
+// ----------------------------------------------------------------------------
+// Vertices
+// ----------------------------------------------------------------------------
+
+CREATE VERTEX Account (
+    PRIMARY_ID accountId STRING,
+    cardType STRING,
+    bankCountry STRING,
+    billingZip STRING,
+    emailDomain STRING,
+    riskScore DOUBLE,
+    status STRING,
+    totalTransactions INT,
+    totalVolume DOUBLE,
+    createdAt DATETIME
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX Card (
+    PRIMARY_ID cardId STRING,
+    card1 INT,
+    card2 DOUBLE,
+    card3 DOUBLE,
+    card4 STRING,
+    card5 DOUBLE,
+    card6 STRING,
+    cardNetwork STRING,
+    cardCategory STRING,
+    isStolen BOOL
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX Device (
+    PRIMARY_ID deviceId STRING,
+    deviceType STRING,
+    browserType STRING,
+    deviceInfo STRING,
+    os STRING,
+    isMobile BOOL,
+    fingerprint STRING,
+    isSuspicious BOOL
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX IP_Address (
+    PRIMARY_ID ipHash STRING,
+    country STRING,
+    isp STRING,
+    isProxy BOOL,
+    isVPN BOOL,
+    riskScore DOUBLE,
+    connectionCount INT
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX Transaction (
+    PRIMARY_ID transactionId STRING,
+    amount DOUBLE,
+    transactionDT INT,
+    productCode STRING,
+    riskScore DOUBLE,
+    channel STRING,
+    isFlagged BOOL,
+    dist1 DOUBLE,
+    dist2 DOUBLE,
+    C1 INT, C2 INT, C3 INT, C4 INT, C5 INT,
+    D1 INT, D2 INT, D3 INT,
+    M1 STRING, M2 STRING, M3 STRING, M4 STRING
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX FraudCase (
+    PRIMARY_ID caseId STRING,
+    status STRING,
+    riskLevel STRING,
+    confidence DOUBLE,
+    openedAt DATETIME,
+    closedAt DATETIME,
+    outcome STRING,
+    findings STRING,
+    preEvidenceAction STRING,
+    postEvidenceAction STRING,
+    approvalRoute STRING,
+    assignedAnalyst STRING
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX FraudPattern (
+    PRIMARY_ID patternId STRING,
+    name STRING,
+    description STRING,
+    indicators STRING,
+    typology STRING,
+    severity STRING,
+    mitigationAction STRING
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX FraudPolicy (
+    PRIMARY_ID policyId STRING,
+    title STRING,
+    threshold DOUBLE,
+    action STRING,
+    approvalRequired STRING,
+    regulatoryRef STRING,
+    slaHours INT
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX SAR_Report (
+    PRIMARY_ID sarId STRING,
+    filedAt DATETIME,
+    narrative STRING,
+    activityType STRING,
+    monetaryAmount DOUBLE,
+    approvalOfficer STRING,
+    finCENStatus STRING
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX CaseMemory (
+    PRIMARY_ID memoryId STRING,
+    caseId STRING,
+    summary STRING,
+    caseOutcome STRING,
+    patternMatched STRING,
+    resolutionTimeHours DOUBLE,
+    embedding LIST<DOUBLE>
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX Analyst (
+    PRIMARY_ID analystId STRING,
+    name STRING,
+    role STRING,
+    authorityLevel STRING,
+    activeCases INT
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+// ----------------------------------------------------------------------------
+// Edges
+// ----------------------------------------------------------------------------
+
+CREATE DIRECTED EDGE MADE_TRANSACTION (FROM Account, TO Transaction) WITH REVERSE_EDGE="TRANSACTION_BY";
+CREATE DIRECTED EDGE USED_CARD (FROM Transaction, TO Card) WITH REVERSE_EDGE="CARD_USED_IN";
+CREATE DIRECTED EDGE ON_DEVICE (FROM Transaction, TO Device) WITH REVERSE_EDGE="DEVICE_TRANSACTED";
+CREATE DIRECTED EDGE FROM_IP (FROM Transaction, TO IP_Address) WITH REVERSE_EDGE="IP_TRANSACTIONS";
+
+CREATE UNDIRECTED EDGE SHARES_DEVICE (FROM Account, TO Account, viaDevice STRING, connectionWeight INT);
+CREATE UNDIRECTED EDGE SHARES_IP (FROM Account, TO Account, viaIP STRING, connectionWeight INT);
+
+CREATE DIRECTED EDGE INVESTIGATED_IN (FROM Transaction, TO FraudCase) WITH REVERSE_EDGE="CASE_TRANSACTIONS";
+CREATE DIRECTED EDGE LINKED_TO_PATTERN (FROM FraudCase, TO FraudPattern, matchScore DOUBLE, matchedAt DATETIME);
+CREATE DIRECTED EDGE GOVERNED_BY (FROM FraudCase, TO FraudPolicy, ruleTriggered STRING);
+CREATE DIRECTED EDGE HAS_SAR (FROM FraudCase, TO SAR_Report);
+CREATE UNDIRECTED EDGE SIMILAR_TO (FROM FraudCase, TO CaseMemory, score DOUBLE);
+CREATE DIRECTED EDGE ASSIGNED_TO (FROM FraudCase, TO Analyst);
+
+// ----------------------------------------------------------------------------
+// Create Graph
+// ----------------------------------------------------------------------------
+
+CREATE GRAPH FraudGraph (
+    Account, Card, Device, IP_Address, Transaction, FraudCase, FraudPattern, FraudPolicy, SAR_Report, CaseMemory, Analyst,
+    MADE_TRANSACTION, TRANSACTION_BY,
+    USED_CARD, CARD_USED_IN,
+    ON_DEVICE, DEVICE_TRANSACTED,
+    FROM_IP, IP_TRANSACTIONS,
+    SHARES_DEVICE, SHARES_IP,
+    INVESTIGATED_IN, CASE_TRANSACTIONS,
+    LINKED_TO_PATTERN, GOVERNED_BY, HAS_SAR, SIMILAR_TO, ASSIGNED_TO
+);

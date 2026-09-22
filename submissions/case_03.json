@@ -1,0 +1,135 @@
+{
+  "case_id": "CASE_03",
+  "case_title": "Impossible Velocity - NY to London Within 45 Minutes",
+  "transaction_id": "TX_3034912",
+  "trigger": {
+    "type": "customer_report",
+    "initial_risk_score": 0.72,
+    "reason": "Customer reported an unrecognized debit while holding their physical card in New York."
+  },
+  "investigation_record": [
+    {
+      "step": "TRIGGER",
+      "timestamp": "2026-09-22T08:52:36.346812",
+      "details": "Investigation triggered for TX_3034912 via customer_report with initial risk score 0.72"
+    },
+    {
+      "step": "CASE_PROGRESSION",
+      "timestamp": "2026-09-22T08:52:36.349460",
+      "details": "FraudCase CASE_03 recorded in TigerGraph with status INVESTIGATING"
+    },
+    {
+      "step": "EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.356352",
+      "details": "Gathered 1 evidence items from TigerGraph (Ring Size: 0, Subgraph Nodes: 6)"
+    },
+    {
+      "step": "PATTERN_DETECTION",
+      "timestamp": "2026-09-22T08:52:36.360162",
+      "details": "Identified 1 matching typologies. Primary: Rapid Geolocation Shift & Impossible Travel (Calculated Fraud Prob: 0.88)"
+    },
+    {
+      "step": "UNCERTAINTY_ASSESSMENT",
+      "timestamp": "2026-09-22T08:52:36.363967",
+      "details": "Assessed confidence at 88% (HIGH). Evidence Gaps: 0. Needs more evidence: False."
+    },
+    {
+      "step": "ACTION_RECOMMENDATION",
+      "timestamp": "2026-09-22T08:52:36.369159",
+      "details": "Recommended Next Best Action: BLOCK_CARD (Route: ANALYST_TIER_1). SAR Required: False."
+    },
+    {
+      "step": "HUMAN_APPROVAL_GATE",
+      "timestamp": "2026-09-22T08:52:36.374071",
+      "details": "Action 'BLOCK_CARD' escalated to ANALYST_TIER_1 for authorization. Status: APPROVED with audit sign-off."
+    },
+    {
+      "step": "MEMORY_UPDATE",
+      "timestamp": "2026-09-22T08:52:36.380611",
+      "details": "Investigation findings, actions, and vector embedding stored in TigerGraph CaseMemory (MEM_CASE_03). Case marked RESOLVED."
+    }
+  ],
+  "evidence": {
+    "evidence_trail": [
+      {
+        "evidence_id": "EV_GRAPH_01",
+        "source": "TigerGraph_MultiHop",
+        "timestamp": "2026-09-22T08:52:36.355858",
+        "title": "Single Account Entity Association",
+        "description": "No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.",
+        "risk_contribution": -0.1,
+        "data": {
+          "ring_size": 0,
+          "connected_accounts": [],
+          "linked_transactions_count": 0,
+          "shared_devices": [
+            "DEV_IOS_IPHONE15_US"
+          ],
+          "shared_ips": [
+            "185.220.101.5"
+          ]
+        }
+      }
+    ],
+    "graph_ring_size": 0,
+    "connected_accounts": [],
+    "velocity_metrics": {
+      "tx_count": 1,
+      "total_volume": 1250.0,
+      "device_count": 1,
+      "ip_count": 1,
+      "avg_amount": 1250.0
+    },
+    "device_signals": {
+      "device_id": "DEV_IOS_IPHONE15_US",
+      "ip_address": "185.220.101.5",
+      "is_suspicious_fingerprint": false,
+      "device_type": "STANDARD_BROWSER"
+    }
+  },
+  "findings": {
+    "fraud_probability": 0.88,
+    "confidence_score": 0.88,
+    "confidence_level": "HIGH",
+    "likely_fraud_type": "Rapid Geolocation Shift & Impossible Travel",
+    "pattern_matches": [
+      {
+        "pattern_id": "PAT-003",
+        "pattern_name": "Rapid Geolocation Shift & Impossible Travel",
+        "typology": "Compromised Credentials / Session Hijacking",
+        "confidence": 0.88,
+        "matched_indicators": [
+          "Unreasonable geographic distance between consecutive logins/charges",
+          "High travel velocity requirement exceeding commercial aviation limits",
+          "Foreign IP gateway with domestic cardholder profile"
+        ],
+        "severity": "HIGH"
+      }
+    ],
+    "evidence_gaps": []
+  },
+  "next_best_action": {
+    "before_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Definite fraud indicators detected (Rapid Geolocation Shift & Impossible Travel). Immediate block recommended.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    },
+    "additional_evidence_requested": [],
+    "additional_evidence_received": null,
+    "after_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Definite fraud indicators detected (Rapid Geolocation Shift & Impossible Travel). Immediate block recommended.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    }
+  },
+  "written_to_tigergraph": {
+    "vertex": "FraudCase",
+    "vertex_id": "CASE_03",
+    "status": "RESOLVED",
+    "case_memory_id": "MEM_CASE_03"
+  },
+  "suspicious_activity_report": null,
+  "explainability_narrative": "Investigation opened for Transaction TX_3034912 ($1,250.00 USD) triggered by customer_report. TigerGraph multi-hop analysis identified 0 connected accounts sharing device and network infrastructure. Topological and signature matching flagged primary typology as 'Rapid Geolocation Shift & Impossible Travel' with confidence of 88%. Prior to additional evidence, next-best action was BLOCK_CARD (Approval: ANALYST_TIER_1). "
+}

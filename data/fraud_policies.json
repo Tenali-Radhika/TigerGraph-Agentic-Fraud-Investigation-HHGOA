@@ -1,0 +1,151 @@
+{
+  "institution_info": {
+    "name": "Horizon Federal Bank & Trust",
+    "fincen_identifier": "HFBT-US-77402",
+    "primary_regulator": "OCC",
+    "compliance_jurisdiction": "United States"
+  },
+  "known_fraud_patterns": [
+    {
+      "pattern_id": "PAT-001",
+      "name": "Card-Not-Present Credential Stuffing & Account Takeover",
+      "typology": "Account Takeover / Automated Attack",
+      "severity": "CRITICAL",
+      "indicators": [
+        "Multiple cards tested sequentially from a single device or IP within 15 minutes",
+        "Sudden browser fingerprint change on established account",
+        "High proportion of failed CVC/expiration verifications prior to approval",
+        "Cardholder billing address differs from IP geolocation"
+      ],
+      "mitigation_action": "Freeze card immediately; require biometric step-up authentication on account"
+    },
+    {
+      "pattern_id": "PAT-002",
+      "name": "Synthetic Identity Fraud Ring",
+      "typology": "Organized Financial Crime Ring",
+      "severity": "CRITICAL",
+      "indicators": [
+        "Network of 3 or more accounts sharing the same device fingerprint or residential proxy subnet",
+        "Fabricated SSN profile with limited credit history but high credit limit assignment",
+        "Small micro-transactions (under $10) followed by immediate maximum limit authorization",
+        "Shared burner email domains (e.g. temporary mail services) across distinct accounts"
+      ],
+      "mitigation_action": "Freeze all connected ring accounts; initiate multi-party FinCEN SAR filing; refer to AML investigation unit"
+    },
+    {
+      "pattern_id": "PAT-003",
+      "name": "Rapid Geolocation Shift & Impossible Travel",
+      "typology": "Compromised Credentials / Session Hijacking",
+      "severity": "HIGH",
+      "indicators": [
+        "Consecutive transactions separated by distance requiring travel velocity exceeding 500 mph",
+        "Transaction originating from known high-risk bulletproof hosting or commercial VPN node",
+        "Device language or timezone mismatch with IP geolocation"
+      ],
+      "mitigation_action": "Hold transaction; trigger push-to-mobile verification with transaction amount and merchant details"
+    },
+    {
+      "pattern_id": "PAT-004",
+      "name": "Device Spoofing & Emulator Farm",
+      "typology": "Technical Exploitation / Bot Farm",
+      "severity": "HIGH",
+      "indicators": [
+        "Device parameters exhibit Android emulator artifacts (e.g., generic build properties, missing sensors)",
+        "Rapid alteration of Canvas and WebGL fingerprints across transactions",
+        "Abnormal interaction timing (sub-second checkout completion without human mouse jitter)"
+      ],
+      "mitigation_action": "Block device fingerprint permanently; decline transaction; mark account for enhanced monitoring"
+    },
+    {
+      "pattern_id": "PAT-005",
+      "name": "Bust-Out / First-Party Credit Depletion",
+      "typology": "First-Party Fraud / Credit Bust-Out",
+      "severity": "HIGH",
+      "indicators": [
+        "Account with 6+ months of normal low-utilization history suddenly spikes to 95%+ limit in 48 hours",
+        "Large purchases at high-liquidity merchants (electronics, gift cards, luxury goods)",
+        "Sudden change of contact phone number or primary billing email immediately before spending burst"
+      ],
+      "mitigation_action": "Place immediate temporary authorization hold on credit line; contact account owner via registered secondary phone"
+    }
+  ],
+  "policies": [
+    {
+      "policy_id": "POL-SAR-001",
+      "title": "Mandatory FinCEN Suspicious Activity Report (SAR) Threshold",
+      "regulatory_reference": "31 U.S.C. 5318(g) / 31 CFR 1020.320",
+      "threshold_amount": 5000.0,
+      "rule": "Any transaction or aggregated series of transactions involving known or suspected fraud totaling $5,000 or greater MUST have a FinCEN SAR drafted and reviewed.",
+      "action": "DRAFT_SAR",
+      "approval_required": "COMPLIANCE_OFFICER",
+      "sla_hours": 24
+    },
+    {
+      "policy_id": "POL-ACT-002",
+      "title": "High-Value Account Freezing Authority",
+      "regulatory_reference": "Bank Policy Chapter 4, Sec 2.1",
+      "threshold_amount": 10000.0,
+      "rule": "Freezing accounts with aggregated balance or active credit lines exceeding $10,000 requires Tier-2 Senior Analyst or Manager approval.",
+      "action": "BLOCK_ACCOUNT",
+      "approval_required": "SENIOR_ANALYST",
+      "sla_hours": 2
+    },
+    {
+      "policy_id": "POL-AUT-003",
+      "title": "Autonomous Safe Actions",
+      "regulatory_reference": "Automated Defense Protocol V3",
+      "threshold_amount": 0.0,
+      "rule": "The AI Agent is authorized to autonomously execute: temporary 2-hour transaction soft-holds, step-up MFA/biometric challenges, customer notification SMS/Push alerts, and enhanced graph monitoring tags.",
+      "action": "AUTONOMOUS_SAFE_EXECUTE",
+      "approval_required": "NONE",
+      "sla_hours": 0
+    },
+    {
+      "policy_id": "POL-UNC-004",
+      "title": "Uncertainty Threshold & Controlled Evidence Gathering",
+      "regulatory_reference": "Model Risk Management SR 11-7",
+      "confidence_threshold": 0.75,
+      "rule": "If fraud probability is elevated (>0.40) but agent assessment confidence is below 0.75, the agent MUST NOT take irreversible blocking actions without first gathering additional evidence (customer validation, step-up challenge, or analyst review).",
+      "action": "REQUEST_EVIDENCE",
+      "approval_required": "NONE",
+      "sla_hours": 1
+    }
+  ],
+  "authority_matrix": {
+    "NONE": {
+      "role": "Autonomous Agent",
+      "allowed_actions": [
+        "ALLOW_TRANSACTION",
+        "SOFT_HOLD_2HR",
+        "STEP_UP_AUTH_REQUEST",
+        "SEND_CUSTOMER_WARNING",
+        "ADD_MONITORING_FLAG",
+        "REQUEST_ADDITIONAL_EVIDENCE"
+      ]
+    },
+    "ANALYST_TIER_1": {
+      "role": "Fraud Analyst",
+      "allowed_actions": [
+        "BLOCK_CARD",
+        "CONFIRM_FRAUD",
+        "CLEAR_FALSE_POSITIVE",
+        "ESCALATE_CASE"
+      ]
+    },
+    "SENIOR_ANALYST": {
+      "role": "Senior Fraud Specialist / Manager",
+      "allowed_actions": [
+        "BLOCK_ACCOUNT",
+        "RECALL_FUNDS",
+        "OVERRIDE_AGENT_DECISION"
+      ]
+    },
+    "COMPLIANCE_OFFICER": {
+      "role": "BSA/AML Compliance Officer",
+      "allowed_actions": [
+        "SUBMIT_SAR_FINCEN",
+        "FILE_LAW_ENFORCEMENT_REFERRAL"
+      ]
+    }
+  }
+}

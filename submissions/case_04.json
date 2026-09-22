@@ -1,0 +1,159 @@
+{
+  "case_id": "CASE_04",
+  "case_title": "Automated Emulator Farm Checkout Burst",
+  "transaction_id": "TX_3038810",
+  "trigger": {
+    "type": "risk_score",
+    "initial_risk_score": 0.88,
+    "reason": "Device fingerprint exhibits known Nox/Bluestacks headless Android simulator signatures."
+  },
+  "investigation_record": [
+    {
+      "step": "TRIGGER",
+      "timestamp": "2026-09-22T08:52:36.401905",
+      "details": "Investigation triggered for TX_3038810 via risk_score with initial risk score 0.88"
+    },
+    {
+      "step": "CASE_PROGRESSION",
+      "timestamp": "2026-09-22T08:52:36.406144",
+      "details": "FraudCase CASE_04 recorded in TigerGraph with status INVESTIGATING"
+    },
+    {
+      "step": "EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.412053",
+      "details": "Gathered 2 evidence items from TigerGraph (Ring Size: 0, Subgraph Nodes: 6)"
+    },
+    {
+      "step": "PATTERN_DETECTION",
+      "timestamp": "2026-09-22T08:52:36.416201",
+      "details": "Identified 2 matching typologies. Primary: Device Spoofing & Emulator Farm (Calculated Fraud Prob: 0.90)"
+    },
+    {
+      "step": "UNCERTAINTY_ASSESSMENT",
+      "timestamp": "2026-09-22T08:52:36.419257",
+      "details": "Assessed confidence at 84% (HIGH). Evidence Gaps: 0. Needs more evidence: False."
+    },
+    {
+      "step": "ACTION_RECOMMENDATION",
+      "timestamp": "2026-09-22T08:52:36.424683",
+      "details": "Recommended Next Best Action: BLOCK_CARD (Route: ANALYST_TIER_1). SAR Required: False."
+    },
+    {
+      "step": "HUMAN_APPROVAL_GATE",
+      "timestamp": "2026-09-22T08:52:36.427458",
+      "details": "Action 'BLOCK_CARD' escalated to ANALYST_TIER_1 for authorization. Status: APPROVED with audit sign-off."
+    },
+    {
+      "step": "MEMORY_UPDATE",
+      "timestamp": "2026-09-22T08:52:36.432467",
+      "details": "Investigation findings, actions, and vector embedding stored in TigerGraph CaseMemory (MEM_CASE_04). Case marked RESOLVED."
+    }
+  ],
+  "evidence": {
+    "evidence_trail": [
+      {
+        "evidence_id": "EV_GRAPH_01",
+        "source": "TigerGraph_MultiHop",
+        "timestamp": "2026-09-22T08:52:36.410657",
+        "title": "Single Account Entity Association",
+        "description": "No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.",
+        "risk_contribution": -0.1,
+        "data": {
+          "ring_size": 0,
+          "connected_accounts": [],
+          "linked_transactions_count": 0,
+          "shared_devices": [
+            "DEV_EMULATOR_FARM_X"
+          ],
+          "shared_ips": [
+            "45.154.255.12"
+          ]
+        }
+      },
+      {
+        "evidence_id": "EV_DEVICE_02",
+        "source": "Device_Fingerprint",
+        "timestamp": "2026-09-22T08:52:36.411637",
+        "title": "Suspicious Device / Network Signature",
+        "description": "Originating fingerprint exhibits emulator, proxy, or bot characteristics (DEV_EMULATOR_FARM_X / 45.154.255.12).",
+        "risk_contribution": 0.8,
+        "data": {
+          "device_id": "DEV_EMULATOR_FARM_X",
+          "ip_address": "45.154.255.12",
+          "is_suspicious_fingerprint": true,
+          "device_type": "EMULATOR/HEADLESS"
+        }
+      }
+    ],
+    "graph_ring_size": 0,
+    "connected_accounts": [],
+    "velocity_metrics": {
+      "tx_count": 1,
+      "total_volume": 499.99,
+      "device_count": 1,
+      "ip_count": 1,
+      "avg_amount": 499.99
+    },
+    "device_signals": {
+      "device_id": "DEV_EMULATOR_FARM_X",
+      "ip_address": "45.154.255.12",
+      "is_suspicious_fingerprint": true,
+      "device_type": "EMULATOR/HEADLESS"
+    }
+  },
+  "findings": {
+    "fraud_probability": 0.9,
+    "confidence_score": 0.84,
+    "confidence_level": "HIGH",
+    "likely_fraud_type": "Device Spoofing & Emulator Farm",
+    "pattern_matches": [
+      {
+        "pattern_id": "PAT-004",
+        "pattern_name": "Device Spoofing & Emulator Farm",
+        "typology": "Technical Exploitation / Bot Farm",
+        "confidence": 0.9,
+        "matched_indicators": [
+          "Originating device ID 'DEV_EMULATOR_FARM_X' contains emulator/bot indicators",
+          "Non-standard canvas/WebGL attributes",
+          "High transaction submission rate"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "pattern_id": "PAT-001",
+        "pattern_name": "Card-Not-Present Credential Stuffing & Account Takeover",
+        "typology": "Account Takeover / Automated Attack",
+        "confidence": 0.74,
+        "matched_indicators": [
+          "Anonymizing proxy/TOR detected in device: DEV_EMULATOR_FARM_X"
+        ],
+        "severity": "HIGH"
+      }
+    ],
+    "evidence_gaps": []
+  },
+  "next_best_action": {
+    "before_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Definite fraud indicators detected (Device Spoofing & Emulator Farm). Immediate block recommended.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    },
+    "additional_evidence_requested": [],
+    "additional_evidence_received": null,
+    "after_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Definite fraud indicators detected (Device Spoofing & Emulator Farm). Immediate block recommended.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    }
+  },
+  "written_to_tigergraph": {
+    "vertex": "FraudCase",
+    "vertex_id": "CASE_04",
+    "status": "RESOLVED",
+    "case_memory_id": "MEM_CASE_04"
+  },
+  "suspicious_activity_report": null,
+  "explainability_narrative": "Investigation opened for Transaction TX_3038810 ($499.99 USD) triggered by risk_score. TigerGraph multi-hop analysis identified 0 connected accounts sharing device and network infrastructure. Topological and signature matching flagged primary typology as 'Device Spoofing & Emulator Farm' with confidence of 84%. Prior to additional evidence, next-best action was BLOCK_CARD (Approval: ANALYST_TIER_1). "
+}

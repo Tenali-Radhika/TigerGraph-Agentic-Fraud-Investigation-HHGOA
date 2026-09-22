@@ -1,0 +1,191 @@
+{
+  "case_id": "CASE_01",
+  "case_title": "Multi-Card Velocity Spike on Single Mobile Device",
+  "transaction_id": "TX_3029182",
+  "trigger": {
+    "type": "risk_score",
+    "initial_risk_score": 0.89,
+    "reason": "Bank ML Risk Engine scored 0.89 due to anomalous high transaction amount and new device association."
+  },
+  "investigation_record": [
+    {
+      "step": "TRIGGER",
+      "timestamp": "2026-09-22T08:52:36.225658",
+      "details": "Investigation triggered for TX_3029182 via risk_score with initial risk score 0.89"
+    },
+    {
+      "step": "CASE_PROGRESSION",
+      "timestamp": "2026-09-22T08:52:36.228593",
+      "details": "FraudCase CASE_01 recorded in TigerGraph with status INVESTIGATING"
+    },
+    {
+      "step": "EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.234099",
+      "details": "Gathered 2 evidence items from TigerGraph (Ring Size: 0, Subgraph Nodes: 6)"
+    },
+    {
+      "step": "PATTERN_DETECTION",
+      "timestamp": "2026-09-22T08:52:36.238232",
+      "details": "Identified 2 matching typologies. Primary: Device Spoofing & Emulator Farm (Calculated Fraud Prob: 0.90)"
+    },
+    {
+      "step": "UNCERTAINTY_ASSESSMENT",
+      "timestamp": "2026-09-22T08:52:36.242008",
+      "details": "Assessed confidence at 84% (HIGH). Evidence Gaps: 0. Needs more evidence: False."
+    },
+    {
+      "step": "ACTION_RECOMMENDATION",
+      "timestamp": "2026-09-22T08:52:36.246876",
+      "details": "Recommended Next Best Action: BLOCK_CARD (Route: ANALYST_TIER_1). SAR Required: True."
+    },
+    {
+      "step": "HUMAN_APPROVAL_GATE",
+      "timestamp": "2026-09-22T08:52:36.250565",
+      "details": "Action 'BLOCK_CARD' escalated to ANALYST_TIER_1 for authorization. Status: APPROVED with audit sign-off."
+    },
+    {
+      "step": "MEMORY_UPDATE",
+      "timestamp": "2026-09-22T08:52:36.255658",
+      "details": "Investigation findings, actions, and vector embedding stored in TigerGraph CaseMemory (MEM_CASE_01). Case marked RESOLVED."
+    }
+  ],
+  "evidence": {
+    "evidence_trail": [
+      {
+        "evidence_id": "EV_GRAPH_01",
+        "source": "TigerGraph_MultiHop",
+        "timestamp": "2026-09-22T08:52:36.233309",
+        "title": "Single Account Entity Association",
+        "description": "No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.",
+        "risk_contribution": -0.1,
+        "data": {
+          "ring_size": 0,
+          "connected_accounts": [],
+          "linked_transactions_count": 0,
+          "shared_devices": [
+            "DEV_ANDROID_EMU_49"
+          ],
+          "shared_ips": [
+            "198.51.100.42"
+          ]
+        }
+      },
+      {
+        "evidence_id": "EV_DEVICE_02",
+        "source": "Device_Fingerprint",
+        "timestamp": "2026-09-22T08:52:36.233621",
+        "title": "Suspicious Device / Network Signature",
+        "description": "Originating fingerprint exhibits emulator, proxy, or bot characteristics (DEV_ANDROID_EMU_49 / 198.51.100.42).",
+        "risk_contribution": 0.8,
+        "data": {
+          "device_id": "DEV_ANDROID_EMU_49",
+          "ip_address": "198.51.100.42",
+          "is_suspicious_fingerprint": true,
+          "device_type": "EMULATOR/HEADLESS"
+        }
+      }
+    ],
+    "graph_ring_size": 0,
+    "connected_accounts": [],
+    "velocity_metrics": {
+      "tx_count": 1,
+      "total_volume": 2450.0,
+      "device_count": 1,
+      "ip_count": 1,
+      "avg_amount": 2450.0
+    },
+    "device_signals": {
+      "device_id": "DEV_ANDROID_EMU_49",
+      "ip_address": "198.51.100.42",
+      "is_suspicious_fingerprint": true,
+      "device_type": "EMULATOR/HEADLESS"
+    }
+  },
+  "findings": {
+    "fraud_probability": 0.9,
+    "confidence_score": 0.84,
+    "confidence_level": "HIGH",
+    "likely_fraud_type": "Device Spoofing & Emulator Farm",
+    "pattern_matches": [
+      {
+        "pattern_id": "PAT-004",
+        "pattern_name": "Device Spoofing & Emulator Farm",
+        "typology": "Technical Exploitation / Bot Farm",
+        "confidence": 0.9,
+        "matched_indicators": [
+          "Originating device ID 'DEV_ANDROID_EMU_49' contains emulator/bot indicators",
+          "Non-standard canvas/WebGL attributes",
+          "High transaction submission rate"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "pattern_id": "PAT-001",
+        "pattern_name": "Card-Not-Present Credential Stuffing & Account Takeover",
+        "typology": "Account Takeover / Automated Attack",
+        "confidence": 0.74,
+        "matched_indicators": [
+          "Elevated ML fraud risk score above 0.80 threshold"
+        ],
+        "severity": "HIGH"
+      }
+    ],
+    "evidence_gaps": []
+  },
+  "next_best_action": {
+    "before_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Definite fraud indicators detected (Device Spoofing & Emulator Farm). Immediate block recommended.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    },
+    "additional_evidence_requested": [],
+    "additional_evidence_received": null,
+    "after_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Definite fraud indicators detected (Device Spoofing & Emulator Farm). Immediate block recommended.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    }
+  },
+  "written_to_tigergraph": {
+    "vertex": "FraudCase",
+    "vertex_id": "CASE_01",
+    "status": "RESOLVED",
+    "case_memory_id": "MEM_CASE_01"
+  },
+  "suspicious_activity_report": {
+    "sar_id": "SAR-FINCEN-20260922-2EDDD7",
+    "filing_institution": {
+      "institution_name": "Horizon Federal Bank & Trust",
+      "fincen_identifier": "HFBT-US-77402",
+      "regulatory_agency": "OCC",
+      "city": "Charlotte",
+      "state": "NC",
+      "country": "US"
+    },
+    "subject_information": {
+      "account_id": "ACC_40192",
+      "card_id": "CARD_882194",
+      "device_id": "DEV_ANDROID_EMU_49",
+      "ip_address": "198.51.100.42",
+      "associated_accounts": []
+    },
+    "suspicious_activity": {
+      "primary_type": "Device Spoofing & Emulator Farm",
+      "typology_code": "ACCOUNT_TAKEOVER",
+      "transaction_count": 2,
+      "total_suspicious_amount": 2450.0,
+      "date_range_start": "2026-08-04T14:22:10Z",
+      "date_range_end": "2026-09-22T08:52:36.246762"
+    },
+    "narrative": "PART I - SUBJECT & ACTIVITY OVERVIEW:\nHorizon Federal Bank & Trust is filing this Suspicious Activity Report (SAR) pursuant to 31 U.S.C. 5318(g) concerning suspected financial crimes categorized under 'Device Spoofing & Emulator Farm'. The primary target transaction TX_3029182 totaled $2,450.00 USD on account ACC_40192, utilizing payment card CARD_882194.\n\nPART II - TIGERGRAPH KNOWLEDGE GRAPH INVESTIGATION FINDINGS:\nTigerGraph multi-hop topological graph analysis revealed that originating device 'DEV_ANDROID_EMU_49' and IP '198.51.100.42' are linked to a coordinated ring of 0 interrelated accounts: ACC_40192. Network connection patterns indicate synchronized unauthorized authorization attempts and high-velocity fund dissipation.\n\nPART III - CHRONOLOGICAL EVIDENCE TRAIL:\n- [2026-09-22T08:52:36.233309] TigerGraph_MultiHop: Single Account Entity Association - No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.\n- [2026-09-22T08:52:36.233621] Device_Fingerprint: Suspicious Device / Network Signature - Originating fingerprint exhibits emulator, proxy, or bot characteristics (DEV_ANDROID_EMU_49 / 198.51.100.42).\n\nPART IV - NEXT BEST ACTIONS & DISPOSITION:\nHorizon Federal Bank automated fraud agents, under supervisory authorization, executed immediate account freezing, revoked associated card authorizations, and preserved transaction audit trails. All related entities have been tagged for AML watchlist monitoring. This report is submitted for FinCEN review.",
+    "compliance_signoff": {
+      "officer_name": "Chief Compliance Officer",
+      "title": "BSA/AML Compliance Officer",
+      "approval_date": "2026-09-22",
+      "status": "APPROVED_FOR_FILING"
+    }
+  },
+  "explainability_narrative": "Investigation opened for Transaction TX_3029182 ($2,450.00 USD) triggered by risk_score. TigerGraph multi-hop analysis identified 0 connected accounts sharing device and network infrastructure. Topological and signature matching flagged primary typology as 'Device Spoofing & Emulator Farm' with confidence of 84%. Prior to additional evidence, next-best action was BLOCK_CARD (Approval: ANALYST_TIER_1). Due to aggregate exposure exceeding statutory thresholds, a FinCEN Suspicious Activity Report (Form 111) was automatically drafted for compliance review."
+}

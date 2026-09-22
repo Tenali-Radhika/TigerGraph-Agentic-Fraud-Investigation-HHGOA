@@ -1,0 +1,152 @@
+{
+  "case_id": "CASE_14",
+  "case_title": "Legitimate Payroll Bonus Deposit & Electronics Purchase",
+  "transaction_id": "TX_3069123",
+  "trigger": {
+    "type": "risk_score",
+    "initial_risk_score": 0.52,
+    "reason": "Transaction amount significantly higher than account median, though matching known home IP and device."
+  },
+  "investigation_record": [
+    {
+      "step": "TRIGGER",
+      "timestamp": "2026-09-22T08:52:36.764438",
+      "details": "Investigation triggered for TX_3069123 via risk_score with initial risk score 0.52"
+    },
+    {
+      "step": "CASE_PROGRESSION",
+      "timestamp": "2026-09-22T08:52:36.766463",
+      "details": "FraudCase CASE_14 recorded in TigerGraph with status INVESTIGATING"
+    },
+    {
+      "step": "EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.768116",
+      "details": "Gathered 1 evidence items from TigerGraph (Ring Size: 0, Subgraph Nodes: 6)"
+    },
+    {
+      "step": "PATTERN_DETECTION",
+      "timestamp": "2026-09-22T08:52:36.770624",
+      "details": "Identified 1 matching typology. Primary: Potential False Positive / Legitimate Unusual Activity (Calculated Fraud Prob: 0.35)"
+    },
+    {
+      "step": "UNCERTAINTY_ASSESSMENT",
+      "timestamp": "2026-09-22T08:52:36.773774",
+      "details": "Assessed confidence at 74% (MEDIUM). Evidence Gaps: 1. Needs more evidence: True."
+    },
+    {
+      "step": "CONTROLLED_EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.776985",
+      "details": "Dispatched controlled inquiries (REQUEST_CUSTOMER_TRANSACTION_VALIDATION, TRIGGER_STEP_UP_BIOMETRIC_AUTH, QUERY_EXTERNAL_BREACH_INTELLIGENCE). Received response: Customer explicitly validated transaction intent via biometric FaceID prompt in mobile banking app."
+    },
+    {
+      "step": "ACTION_RECOMMENDATION",
+      "timestamp": "2026-09-22T08:52:36.779453",
+      "details": "Recommended Next Best Action: ALLOW_TRANSACTION (Route: NONE). SAR Required: False."
+    },
+    {
+      "step": "AUTONOMOUS_EXECUTION",
+      "timestamp": "2026-09-22T08:52:36.783817",
+      "details": "Action 'ALLOW_TRANSACTION' executed autonomously within safe policy boundaries."
+    },
+    {
+      "step": "MEMORY_UPDATE",
+      "timestamp": "2026-09-22T08:52:36.786660",
+      "details": "Investigation findings, actions, and vector embedding stored in TigerGraph CaseMemory (MEM_CASE_14). Case marked RESOLVED."
+    }
+  ],
+  "evidence": {
+    "evidence_trail": [
+      {
+        "evidence_id": "EV_GRAPH_01",
+        "source": "TigerGraph_MultiHop",
+        "timestamp": "2026-09-22T08:52:36.767914",
+        "title": "Single Account Entity Association",
+        "description": "No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.",
+        "risk_contribution": -0.1,
+        "data": {
+          "ring_size": 0,
+          "connected_accounts": [],
+          "linked_transactions_count": 0,
+          "shared_devices": [
+            "DEV_HOME_DESKTOP_PC"
+          ],
+          "shared_ips": [
+            "68.42.119.80"
+          ]
+        }
+      }
+    ],
+    "graph_ring_size": 0,
+    "connected_accounts": [],
+    "velocity_metrics": {
+      "tx_count": 1,
+      "total_volume": 1450.0,
+      "device_count": 1,
+      "ip_count": 1,
+      "avg_amount": 1450.0
+    },
+    "device_signals": {
+      "device_id": "DEV_HOME_DESKTOP_PC",
+      "ip_address": "68.42.119.80",
+      "is_suspicious_fingerprint": false,
+      "device_type": "STANDARD_BROWSER"
+    }
+  },
+  "findings": {
+    "fraud_probability": 0.35,
+    "confidence_score": 0.74,
+    "confidence_level": "MEDIUM",
+    "likely_fraud_type": "Potential False Positive / Legitimate Unusual Activity",
+    "pattern_matches": [
+      {
+        "pattern_id": "PAT-FP",
+        "pattern_name": "Potential False Positive / Legitimate Unusual Activity",
+        "typology": "False Positive / Legitimate Activity",
+        "confidence": 0.3,
+        "matched_indicators": [
+          "Case title contains legitimate/false-positive contextual keywords",
+          "Customer history consistent with authorized activity",
+          "No corroborating fraud ring or device spoofing signals"
+        ],
+        "severity": "LOW"
+      }
+    ],
+    "evidence_gaps": [
+      "Independent verification of customer travel status or device authorization pending"
+    ]
+  },
+  "next_best_action": {
+    "before_additional_evidence": {
+      "action": "REQUEST_STEP_UP_AUTH",
+      "rationale": "Elevated risk signals present with high uncertainty. Soft hold and step-up auth requested prior to destructive block.",
+      "required_approval_route": "NONE",
+      "requires_approval": false
+    },
+    "additional_evidence_requested": [
+      "REQUEST_CUSTOMER_TRANSACTION_VALIDATION",
+      "TRIGGER_STEP_UP_BIOMETRIC_AUTH",
+      "QUERY_EXTERNAL_BREACH_INTELLIGENCE"
+    ],
+    "additional_evidence_received": {
+      "source": "Customer_Mobile_App_Validation",
+      "status": "VALIDATED",
+      "is_cleared": true,
+      "summary": "Customer explicitly validated transaction intent via biometric FaceID prompt in mobile banking app.",
+      "timestamp": "2026-09-22T08:52:36.776959"
+    },
+    "after_additional_evidence": {
+      "action": "ALLOW_TRANSACTION",
+      "rationale": "Cardholder validated charge intent via authenticated channel. Case cleared as legitimate false positive.",
+      "required_approval_route": "NONE",
+      "requires_approval": false
+    }
+  },
+  "written_to_tigergraph": {
+    "vertex": "FraudCase",
+    "vertex_id": "CASE_14",
+    "status": "RESOLVED",
+    "case_memory_id": "MEM_CASE_14"
+  },
+  "suspicious_activity_report": null,
+  "explainability_narrative": "Investigation opened for Transaction TX_3069123 ($1,450.00 USD) triggered by risk_score. TigerGraph multi-hop analysis identified 0 connected accounts sharing device and network infrastructure. Topological and signature matching flagged primary typology as 'Potential False Positive / Legitimate Unusual Activity' with confidence of 74%. Prior to additional evidence, next-best action was REQUEST_STEP_UP_AUTH (Approval: NONE). Additional evidence gathered: 'Customer explicitly validated transaction intent via biometric FaceID prompt in mobile banking app.'. Post-evidence updated next-best action transitioned to ALLOW_TRANSACTION with route NONE. "
+}

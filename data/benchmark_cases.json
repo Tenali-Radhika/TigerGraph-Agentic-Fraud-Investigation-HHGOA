@@ -1,0 +1,402 @@
+[
+  {
+    "case_id": "CASE_01",
+    "case_title": "Multi-Card Velocity Spike on Single Mobile Device",
+    "transaction_id": "TX_3029182",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.89,
+    "transaction_details": {
+      "amount": 2450.00,
+      "currency": "USD",
+      "timestamp": "2026-08-04T14:22:10Z",
+      "merchant": "Apex Digital Electronics",
+      "product_code": "W",
+      "channel": "Online Web",
+      "card_id": "CARD_882194",
+      "account_id": "ACC_40192",
+      "device_id": "DEV_ANDROID_EMU_49",
+      "ip_address": "198.51.100.42"
+    },
+    "trigger_reason": "Bank ML Risk Engine scored 0.89 due to anomalous high transaction amount and new device association."
+  },
+  {
+    "case_id": "CASE_02",
+    "case_title": "Synthetic Identity Ring Across 4 Connected Accounts",
+    "transaction_id": "TX_3031048",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.94,
+    "transaction_details": {
+      "amount": 8900.00,
+      "currency": "USD",
+      "timestamp": "2026-08-06T03:15:45Z",
+      "merchant": "Global Luxury Gold Exchange",
+      "product_code": "C",
+      "channel": "API Merchant",
+      "card_id": "CARD_773102",
+      "account_id": "ACC_99014",
+      "device_id": "DEV_FINGERPRINT_RING_02",
+      "ip_address": "203.0.113.88"
+    },
+    "trigger_reason": "Extreme risk score (0.94) and high monetary value ($8,900) triggering immediate fraud screening."
+  },
+  {
+    "case_id": "CASE_03",
+    "case_title": "Impossible Velocity - NY to London Within 45 Minutes",
+    "transaction_id": "TX_3034912",
+    "trigger_type": "customer_report",
+    "initial_risk_score": 0.72,
+    "transaction_details": {
+      "amount": 1250.00,
+      "currency": "USD",
+      "timestamp": "2026-08-08T18:40:00Z",
+      "merchant": "Mayfair High-End Jewelers (UK)",
+      "product_code": "W",
+      "channel": "POS Terminal",
+      "card_id": "CARD_119034",
+      "account_id": "ACC_32891",
+      "device_id": "DEV_IOS_IPHONE15_US",
+      "ip_address": "185.220.101.5"
+    },
+    "trigger_reason": "Customer reported an unrecognized debit while holding their physical card in New York."
+  },
+  {
+    "case_id": "CASE_04",
+    "case_title": "Automated Emulator Farm Checkout Burst",
+    "transaction_id": "TX_3038810",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.88,
+    "transaction_details": {
+      "amount": 499.99,
+      "currency": "USD",
+      "timestamp": "2026-08-11T09:12:00Z",
+      "merchant": "StreamTech Gift Card Store",
+      "product_code": "W",
+      "channel": "Mobile App",
+      "card_id": "CARD_550219",
+      "account_id": "ACC_76120",
+      "device_id": "DEV_EMULATOR_FARM_X",
+      "ip_address": "45.154.255.12"
+    },
+    "trigger_reason": "Device fingerprint exhibits known Nox/Bluestacks headless Android simulator signatures."
+  },
+  {
+    "case_id": "CASE_05",
+    "case_title": "Bust-Out Spree on Dormant Platinum Credit Line",
+    "transaction_id": "TX_3042190",
+    "trigger_type": "analyst_request",
+    "initial_risk_score": 0.81,
+    "transaction_details": {
+      "amount": 14200.00,
+      "currency": "USD",
+      "timestamp": "2026-08-14T22:04:18Z",
+      "merchant": "Premier Watch Vault",
+      "product_code": "R",
+      "channel": "Online Web",
+      "card_id": "CARD_992100",
+      "account_id": "ACC_11094",
+      "device_id": "DEV_MAC_CHROME_88",
+      "ip_address": "172.56.21.90"
+    },
+    "trigger_reason": "Fraud Analyst flagged account for sudden utilization spike to 98% of credit limit in 24 hours."
+  },
+  {
+    "case_id": "CASE_06",
+    "case_title": "High-Risk Proxy Card Testing Micro-Transactions",
+    "transaction_id": "TX_3045512",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.68,
+    "transaction_details": {
+      "amount": 1.99,
+      "currency": "USD",
+      "timestamp": "2026-08-17T02:00:15Z",
+      "merchant": "MicroDonations Org",
+      "product_code": "W",
+      "channel": "Web Gateway",
+      "card_id": "CARD_332014",
+      "account_id": "ACC_65412",
+      "device_id": "DEV_TOR_EXIT_NODE_1",
+      "ip_address": "199.249.230.71"
+    },
+    "trigger_reason": "Repeated sub-$5 authorization attempts originating through a Tor network exit node."
+  },
+  {
+    "case_id": "CASE_07",
+    "case_title": "Legitimate High-Value Traveler (VIP False Positive Test)",
+    "transaction_id": "TX_3048991",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.65,
+    "transaction_details": {
+      "amount": 3400.00,
+      "currency": "USD",
+      "timestamp": "2026-08-20T11:45:00Z",
+      "merchant": "Ritz-Carlton Tokyo Resort",
+      "product_code": "H",
+      "channel": "Hotel POS",
+      "card_id": "CARD_440192",
+      "account_id": "ACC_88190",
+      "device_id": "DEV_IPHONE_VIP_KNOWN",
+      "ip_address": "133.242.18.2"
+    },
+    "trigger_reason": "High-value cross-border hotel charge on VIP account. Elevated score due to foreign IP address."
+  },
+  {
+    "case_id": "CASE_08",
+    "case_title": "Coordinated Account Takeover with Contact Details Change",
+    "transaction_id": "TX_3051204",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.86,
+    "transaction_details": {
+      "amount": 5600.00,
+      "currency": "USD",
+      "timestamp": "2026-08-22T16:30:12Z",
+      "merchant": "CryptoWire Exchange",
+      "product_code": "C",
+      "channel": "Online Web",
+      "card_id": "CARD_661903",
+      "account_id": "ACC_22910",
+      "device_id": "DEV_WINDOWS_NEW_DEVICE",
+      "ip_address": "194.26.29.112"
+    },
+    "trigger_reason": "High-value crypto purchase initiated 10 minutes after primary email was updated in portal."
+  },
+  {
+    "case_id": "CASE_09",
+    "case_title": "Multiple Cards Tested in Rapid Sequence Across Subnet",
+    "transaction_id": "TX_3053890",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.77,
+    "transaction_details": {
+      "amount": 780.50,
+      "currency": "USD",
+      "timestamp": "2026-08-25T04:18:22Z",
+      "merchant": "QuickPay Wholesale",
+      "product_code": "W",
+      "channel": "Web Gateway",
+      "card_id": "CARD_772189",
+      "account_id": "ACC_34891",
+      "device_id": "DEV_LINUX_BOT_SCRIPT",
+      "ip_address": "185.196.220.14"
+    },
+    "trigger_reason": "Card velocity anomaly: 7 distinct credit cards attempted from same IP subnet within 1 hour."
+  },
+  {
+    "case_id": "CASE_10",
+    "case_title": "Uncertain First-Time Merchant Electronics Purchase",
+    "transaction_id": "TX_3057100",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.58,
+    "transaction_details": {
+      "amount": 1850.00,
+      "currency": "USD",
+      "timestamp": "2026-08-27T19:20:40Z",
+      "merchant": "SoundWave Pro Audio Gear",
+      "product_code": "W",
+      "channel": "Online Web",
+      "card_id": "CARD_551092",
+      "account_id": "ACC_44120",
+      "device_id": "DEV_MACBOOK_AIR_M2",
+      "ip_address": "73.189.44.10"
+    },
+    "trigger_reason": "First-time purchase at high-risk merchant category. Customer device known, but amount is 5x historical average."
+  },
+  {
+    "case_id": "CASE_11",
+    "case_title": "Stolen Card Used on Newly Minted Account",
+    "transaction_id": "TX_3060215",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.91,
+    "transaction_details": {
+      "amount": 3100.00,
+      "currency": "USD",
+      "timestamp": "2026-08-29T21:05:14Z",
+      "merchant": "Nordic Electronics Hub",
+      "product_code": "W",
+      "channel": "Online Web",
+      "card_id": "CARD_881200",
+      "account_id": "ACC_99182",
+      "device_id": "DEV_ANDROID_SAMSUNG_S23",
+      "ip_address": "91.240.118.55"
+    },
+    "trigger_reason": "Card flagged by external Visa Risk Manager feed as compromised in recent third-party data breach."
+  },
+  {
+    "case_id": "CASE_12",
+    "case_title": "Shared IP Subnet Linking 5 Fraudulent Loan Applications",
+    "transaction_id": "TX_3063412",
+    "trigger_type": "analyst_request",
+    "initial_risk_score": 0.85,
+    "transaction_details": {
+      "amount": 9500.00,
+      "currency": "USD",
+      "timestamp": "2026-09-01T13:40:00Z",
+      "merchant": "Instant Cash Lending Direct",
+      "product_code": "C",
+      "channel": "API Merchant",
+      "card_id": "CARD_339102",
+      "account_id": "ACC_12093",
+      "device_id": "DEV_RESIDENTIAL_PROXY_5",
+      "ip_address": "192.0.2.199"
+    },
+    "trigger_reason": "Graph linkage analysis revealed IP address associated with multiple defaulted lending applications."
+  },
+  {
+    "case_id": "CASE_13",
+    "case_title": "Middle-of-the-Night ATM Withdrawal Attempt Exceeding Limits",
+    "transaction_id": "TX_3066701",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.79,
+    "transaction_details": {
+      "amount": 2000.00,
+      "currency": "USD",
+      "timestamp": "2026-09-03T03:52:19Z",
+      "merchant": "Downtown Express Cash ATM",
+      "product_code": "C",
+      "channel": "ATM",
+      "card_id": "CARD_221908",
+      "account_id": "ACC_87612",
+      "device_id": "DEV_ATM_HARDWARE_04",
+      "ip_address": "10.0.4.12"
+    },
+    "trigger_reason": "PIN failure followed by maximum limit cash withdrawal request at unusual operating hour."
+  },
+  {
+    "case_id": "CASE_14",
+    "case_title": "Legitimate Payroll Bonus Deposit & Electronics Purchase",
+    "transaction_id": "TX_3069123",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.52,
+    "transaction_details": {
+      "amount": 1450.00,
+      "currency": "USD",
+      "timestamp": "2026-09-05T15:10:00Z",
+      "merchant": "Best Buy Online",
+      "product_code": "W",
+      "channel": "Online Web",
+      "card_id": "CARD_449012",
+      "account_id": "ACC_55219",
+      "device_id": "DEV_HOME_DESKTOP_PC",
+      "ip_address": "68.42.119.80"
+    },
+    "trigger_reason": "Transaction amount significantly higher than account median, though matching known home IP and device."
+  },
+  {
+    "case_id": "CASE_15",
+    "case_title": "Cross-Border Remittance to High-Risk Jurisdiction",
+    "transaction_id": "TX_3072450",
+    "trigger_type": "customer_report",
+    "initial_risk_score": 0.93,
+    "transaction_details": {
+      "amount": 7500.00,
+      "currency": "USD",
+      "timestamp": "2026-09-07T11:05:33Z",
+      "merchant": "TransGlobal Wire Transfer",
+      "product_code": "W",
+      "channel": "Wire API",
+      "card_id": "CARD_774901",
+      "account_id": "ACC_11904",
+      "device_id": "DEV_UNKNOWN_UBUNTU_VM",
+      "ip_address": "103.251.167.20"
+    },
+    "trigger_reason": "Customer called emergency support stating an unauthorized wire transfer was scheduled from their account."
+  },
+  {
+    "case_id": "CASE_16",
+    "case_title": "Bursty In-App Game Currency Purchases on Compromised Child Card",
+    "transaction_id": "TX_3075600",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.69,
+    "transaction_details": {
+      "amount": 850.00,
+      "currency": "USD",
+      "timestamp": "2026-09-10T17:30:10Z",
+      "merchant": "EpicVerse Virtual Store",
+      "product_code": "W",
+      "channel": "In-App Store",
+      "card_id": "CARD_663219",
+      "account_id": "ACC_99201",
+      "device_id": "DEV_IPAD_FAMILY_01",
+      "ip_address": "98.194.22.4"
+    },
+    "trigger_reason": "14 micro-transactions totaling $850 executed in 12 minutes on family shared tablet."
+  },
+  {
+    "case_id": "CASE_17",
+    "case_title": "Commercial Credit Card Dump Testing on SaaS Subscriptions",
+    "transaction_id": "TX_3078901",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.84,
+    "transaction_details": {
+      "amount": 35.00,
+      "currency": "USD",
+      "timestamp": "2026-09-12T05:44:11Z",
+      "merchant": "CloudServer VPS Hosting",
+      "product_code": "W",
+      "channel": "Web Gateway",
+      "card_id": "CARD_112093",
+      "account_id": "ACC_44018",
+      "device_id": "DEV_PYTHON_REQUESTS_UA",
+      "ip_address": "193.106.191.22"
+    },
+    "trigger_reason": "Scripted HTTP client headers detected with missing browser referer and headless TLS fingerprint."
+  },
+  {
+    "case_id": "CASE_18",
+    "case_title": "Structuring Pattern Evading $10,000 Currency Reporting",
+    "transaction_id": "TX_3081240",
+    "trigger_type": "analyst_request",
+    "initial_risk_score": 0.90,
+    "transaction_details": {
+      "amount": 9850.00,
+      "currency": "USD",
+      "timestamp": "2026-09-14T14:15:00Z",
+      "merchant": "Apex Precious Metals LLC",
+      "product_code": "C",
+      "channel": "POS Merchant",
+      "card_id": "CARD_883019",
+      "account_id": "ACC_77019",
+      "device_id": "DEV_TABLET_POS_TERMINAL",
+      "ip_address": "173.239.198.50"
+    },
+    "trigger_reason": "Transaction amount just under the $10,000 CTR filing threshold following two previous $9,500 charges."
+  },
+  {
+    "case_id": "CASE_19",
+    "case_title": "False Alarm - Recurring Annual Insurance Premium",
+    "transaction_id": "TX_3084501",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.48,
+    "transaction_details": {
+      "amount": 2100.00,
+      "currency": "USD",
+      "timestamp": "2026-09-16T10:00:00Z",
+      "merchant": "Liberty Mutual Life Insurance",
+      "product_code": "W",
+      "channel": "Recurring Billing",
+      "card_id": "CARD_559012",
+      "account_id": "ACC_33910",
+      "device_id": "DEV_NONE_RECURRING",
+      "ip_address": "12.180.50.2"
+    },
+    "trigger_reason": "Large lump-sum transaction flagged by automated rule due to amount spike vs monthly averages."
+  },
+  {
+    "case_id": "CASE_20",
+    "case_title": "Sophisticated Multi-Hop Bust-Out with Stolen Identity",
+    "transaction_id": "TX_3088999",
+    "trigger_type": "risk_score",
+    "initial_risk_score": 0.96,
+    "transaction_details": {
+      "amount": 16500.00,
+      "currency": "USD",
+      "timestamp": "2026-09-18T20:11:45Z",
+      "merchant": "Global Exotic Motors Direct",
+      "product_code": "C",
+      "channel": "Online Web",
+      "card_id": "CARD_994012",
+      "account_id": "ACC_88019",
+      "device_id": "DEV_LINUX_CHROME_SPOOF",
+      "ip_address": "194.165.16.8"
+    },
+    "trigger_reason": "Critical score (0.96) on $16,500 transaction with multiple linked accounts showing simultaneous default."
+  }
+]

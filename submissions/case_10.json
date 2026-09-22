@@ -1,0 +1,154 @@
+{
+  "case_id": "CASE_10",
+  "case_title": "Uncertain First-Time Merchant Electronics Purchase",
+  "transaction_id": "TX_3057100",
+  "trigger": {
+    "type": "risk_score",
+    "initial_risk_score": 0.58,
+    "reason": "First-time purchase at high-risk merchant category. Customer device known, but amount is 5x historical average."
+  },
+  "investigation_record": [
+    {
+      "step": "TRIGGER",
+      "timestamp": "2026-09-22T08:52:36.634638",
+      "details": "Investigation triggered for TX_3057100 via risk_score with initial risk score 0.58"
+    },
+    {
+      "step": "CASE_PROGRESSION",
+      "timestamp": "2026-09-22T08:52:36.637381",
+      "details": "FraudCase CASE_10 recorded in TigerGraph with status INVESTIGATING"
+    },
+    {
+      "step": "EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.640286",
+      "details": "Gathered 1 evidence items from TigerGraph (Ring Size: 0, Subgraph Nodes: 6)"
+    },
+    {
+      "step": "PATTERN_DETECTION",
+      "timestamp": "2026-09-22T08:52:36.643440",
+      "details": "Identified 1 matching typologies. Primary: Anomalous Spending - Insufficient Typology Match (Calculated Fraud Prob: 0.58)"
+    },
+    {
+      "step": "UNCERTAINTY_ASSESSMENT",
+      "timestamp": "2026-09-22T08:52:36.645704",
+      "details": "Assessed confidence at 62% (LOW). Evidence Gaps: 3. Needs more evidence: True."
+    },
+    {
+      "step": "CONTROLLED_EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.647938",
+      "details": "Dispatched controlled inquiries (REQUEST_CUSTOMER_TRANSACTION_VALIDATION, TRIGGER_STEP_UP_BIOMETRIC_AUTH, QUERY_EXTERNAL_BREACH_INTELLIGENCE). Received response: Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy."
+    },
+    {
+      "step": "ACTION_RECOMMENDATION",
+      "timestamp": "2026-09-22T08:52:36.650483",
+      "details": "Recommended Next Best Action: BLOCK_CARD (Route: ANALYST_TIER_1). SAR Required: False."
+    },
+    {
+      "step": "HUMAN_APPROVAL_GATE",
+      "timestamp": "2026-09-22T08:52:36.653914",
+      "details": "Action 'BLOCK_CARD' escalated to ANALYST_TIER_1 for authorization. Status: APPROVED with audit sign-off."
+    },
+    {
+      "step": "MEMORY_UPDATE",
+      "timestamp": "2026-09-22T08:52:36.656277",
+      "details": "Investigation findings, actions, and vector embedding stored in TigerGraph CaseMemory (MEM_CASE_10). Case marked RESOLVED."
+    }
+  ],
+  "evidence": {
+    "evidence_trail": [
+      {
+        "evidence_id": "EV_GRAPH_01",
+        "source": "TigerGraph_MultiHop",
+        "timestamp": "2026-09-22T08:52:36.639964",
+        "title": "Single Account Entity Association",
+        "description": "No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.",
+        "risk_contribution": -0.1,
+        "data": {
+          "ring_size": 0,
+          "connected_accounts": [],
+          "linked_transactions_count": 0,
+          "shared_devices": [
+            "DEV_MACBOOK_AIR_M2"
+          ],
+          "shared_ips": [
+            "73.189.44.10"
+          ]
+        }
+      }
+    ],
+    "graph_ring_size": 0,
+    "connected_accounts": [],
+    "velocity_metrics": {
+      "tx_count": 1,
+      "total_volume": 1850.0,
+      "device_count": 1,
+      "ip_count": 1,
+      "avg_amount": 1850.0
+    },
+    "device_signals": {
+      "device_id": "DEV_MACBOOK_AIR_M2",
+      "ip_address": "73.189.44.10",
+      "is_suspicious_fingerprint": false,
+      "device_type": "STANDARD_BROWSER"
+    }
+  },
+  "findings": {
+    "fraud_probability": 0.58,
+    "confidence_score": 0.62,
+    "confidence_level": "LOW",
+    "likely_fraud_type": "Anomalous Spending - Insufficient Typology Match",
+    "pattern_matches": [
+      {
+        "pattern_id": "PAT-UNK",
+        "pattern_name": "Anomalous Spending - Insufficient Typology Match",
+        "typology": "Unclassified Suspicious Activity",
+        "confidence": 0.58,
+        "matched_indicators": [
+          "Initial risk score 0.58 exceeds monitoring threshold",
+          "No exact match against known fraud typologies - requires manual review",
+          "Transaction amount: $1,850.00 via Online Web"
+        ],
+        "severity": "MEDIUM"
+      }
+    ],
+    "evidence_gaps": [
+      "Cardholder direct validation of charge intent is absent",
+      "Step-up biometric / SMS OTP challenge unverified",
+      "Merchant item fulfillment & shipping address confirmation missing"
+    ]
+  },
+  "next_best_action": {
+    "before_additional_evidence": {
+      "action": "REQUEST_STEP_UP_AUTH",
+      "rationale": "Elevated risk signals present with high uncertainty. Soft hold and step-up auth requested prior to destructive block.",
+      "required_approval_route": "NONE",
+      "requires_approval": false
+    },
+    "additional_evidence_requested": [
+      "REQUEST_CUSTOMER_TRANSACTION_VALIDATION",
+      "TRIGGER_STEP_UP_BIOMETRIC_AUTH",
+      "QUERY_EXTERNAL_BREACH_INTELLIGENCE"
+    ],
+    "additional_evidence_received": {
+      "source": "Step_Up_MFA_Challenge",
+      "status": "FAILED_NO_RESPONSE",
+      "is_cleared": false,
+      "summary": "Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy.",
+      "timestamp": "2026-09-22T08:52:36.647913"
+    },
+    "after_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Additional evidence confirmed unauthorized access (Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy.). Permanent mitigation required.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    }
+  },
+  "written_to_tigergraph": {
+    "vertex": "FraudCase",
+    "vertex_id": "CASE_10",
+    "status": "RESOLVED",
+    "case_memory_id": "MEM_CASE_10"
+  },
+  "suspicious_activity_report": null,
+  "explainability_narrative": "Investigation opened for Transaction TX_3057100 ($1,850.00 USD) triggered by risk_score. TigerGraph multi-hop analysis identified 0 connected accounts sharing device and network infrastructure. Topological and signature matching flagged primary typology as 'Anomalous Spending - Insufficient Typology Match' with confidence of 62%. Prior to additional evidence, next-best action was REQUEST_STEP_UP_AUTH (Approval: NONE). Additional evidence gathered: 'Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy.'. Post-evidence updated next-best action transitioned to BLOCK_CARD with route ANALYST_TIER_1. "
+}

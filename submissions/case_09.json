@@ -1,0 +1,149 @@
+{
+  "case_id": "CASE_09",
+  "case_title": "Multiple Cards Tested in Rapid Sequence Across Subnet",
+  "transaction_id": "TX_3053890",
+  "trigger": {
+    "type": "risk_score",
+    "initial_risk_score": 0.77,
+    "reason": "Card velocity anomaly: 7 distinct credit cards attempted from same IP subnet within 1 hour."
+  },
+  "investigation_record": [
+    {
+      "step": "TRIGGER",
+      "timestamp": "2026-09-22T08:52:36.603084",
+      "details": "Investigation triggered for TX_3053890 via risk_score with initial risk score 0.77"
+    },
+    {
+      "step": "CASE_PROGRESSION",
+      "timestamp": "2026-09-22T08:52:36.605429",
+      "details": "FraudCase CASE_09 recorded in TigerGraph with status INVESTIGATING"
+    },
+    {
+      "step": "EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.607829",
+      "details": "Gathered 2 evidence items from TigerGraph (Ring Size: 0, Subgraph Nodes: 6)"
+    },
+    {
+      "step": "PATTERN_DETECTION",
+      "timestamp": "2026-09-22T08:52:36.610217",
+      "details": "Identified 1 matching typologies. Primary: Device Spoofing & Emulator Farm (Calculated Fraud Prob: 0.90)"
+    },
+    {
+      "step": "UNCERTAINTY_ASSESSMENT",
+      "timestamp": "2026-09-22T08:52:36.612060",
+      "details": "Assessed confidence at 84% (HIGH). Evidence Gaps: 0. Needs more evidence: False."
+    },
+    {
+      "step": "ACTION_RECOMMENDATION",
+      "timestamp": "2026-09-22T08:52:36.615846",
+      "details": "Recommended Next Best Action: BLOCK_CARD (Route: ANALYST_TIER_1). SAR Required: False."
+    },
+    {
+      "step": "HUMAN_APPROVAL_GATE",
+      "timestamp": "2026-09-22T08:52:36.618161",
+      "details": "Action 'BLOCK_CARD' escalated to ANALYST_TIER_1 for authorization. Status: APPROVED with audit sign-off."
+    },
+    {
+      "step": "MEMORY_UPDATE",
+      "timestamp": "2026-09-22T08:52:36.621169",
+      "details": "Investigation findings, actions, and vector embedding stored in TigerGraph CaseMemory (MEM_CASE_09). Case marked RESOLVED."
+    }
+  ],
+  "evidence": {
+    "evidence_trail": [
+      {
+        "evidence_id": "EV_GRAPH_01",
+        "source": "TigerGraph_MultiHop",
+        "timestamp": "2026-09-22T08:52:36.607497",
+        "title": "Single Account Entity Association",
+        "description": "No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.",
+        "risk_contribution": -0.1,
+        "data": {
+          "ring_size": 0,
+          "connected_accounts": [],
+          "linked_transactions_count": 0,
+          "shared_devices": [
+            "DEV_LINUX_BOT_SCRIPT"
+          ],
+          "shared_ips": [
+            "185.196.220.14"
+          ]
+        }
+      },
+      {
+        "evidence_id": "EV_DEVICE_02",
+        "source": "Device_Fingerprint",
+        "timestamp": "2026-09-22T08:52:36.607654",
+        "title": "Suspicious Device / Network Signature",
+        "description": "Originating fingerprint exhibits emulator, proxy, or bot characteristics (DEV_LINUX_BOT_SCRIPT / 185.196.220.14).",
+        "risk_contribution": 0.8,
+        "data": {
+          "device_id": "DEV_LINUX_BOT_SCRIPT",
+          "ip_address": "185.196.220.14",
+          "is_suspicious_fingerprint": true,
+          "device_type": "EMULATOR/HEADLESS"
+        }
+      }
+    ],
+    "graph_ring_size": 0,
+    "connected_accounts": [],
+    "velocity_metrics": {
+      "tx_count": 1,
+      "total_volume": 780.5,
+      "device_count": 1,
+      "ip_count": 1,
+      "avg_amount": 780.5
+    },
+    "device_signals": {
+      "device_id": "DEV_LINUX_BOT_SCRIPT",
+      "ip_address": "185.196.220.14",
+      "is_suspicious_fingerprint": true,
+      "device_type": "EMULATOR/HEADLESS"
+    }
+  },
+  "findings": {
+    "fraud_probability": 0.9,
+    "confidence_score": 0.84,
+    "confidence_level": "HIGH",
+    "likely_fraud_type": "Device Spoofing & Emulator Farm",
+    "pattern_matches": [
+      {
+        "pattern_id": "PAT-004",
+        "pattern_name": "Device Spoofing & Emulator Farm",
+        "typology": "Technical Exploitation / Bot Farm",
+        "confidence": 0.9,
+        "matched_indicators": [
+          "Originating device ID 'DEV_LINUX_BOT_SCRIPT' contains emulator/bot indicators",
+          "Non-standard canvas/WebGL attributes",
+          "High transaction submission rate"
+        ],
+        "severity": "HIGH"
+      }
+    ],
+    "evidence_gaps": []
+  },
+  "next_best_action": {
+    "before_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Definite fraud indicators detected (Device Spoofing & Emulator Farm). Immediate block recommended.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    },
+    "additional_evidence_requested": [],
+    "additional_evidence_received": null,
+    "after_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Definite fraud indicators detected (Device Spoofing & Emulator Farm). Immediate block recommended.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    }
+  },
+  "written_to_tigergraph": {
+    "vertex": "FraudCase",
+    "vertex_id": "CASE_09",
+    "status": "RESOLVED",
+    "case_memory_id": "MEM_CASE_09"
+  },
+  "suspicious_activity_report": null,
+  "explainability_narrative": "Investigation opened for Transaction TX_3053890 ($780.50 USD) triggered by risk_score. TigerGraph multi-hop analysis identified 0 connected accounts sharing device and network infrastructure. Topological and signature matching flagged primary typology as 'Device Spoofing & Emulator Farm' with confidence of 84%. Prior to additional evidence, next-best action was BLOCK_CARD (Approval: ANALYST_TIER_1). "
+}

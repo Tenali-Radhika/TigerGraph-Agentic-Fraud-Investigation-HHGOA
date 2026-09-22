@@ -1,0 +1,182 @@
+[
+  {
+    "case_id": "CASE_01",
+    "title": "Multi-Card Velocity Spike on Single Mobile Device",
+    "fraud_type": "Device Spoofing & Emulator Farm",
+    "pre_action": "BLOCK_CARD",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": true,
+    "file": "case_01.json"
+  },
+  {
+    "case_id": "CASE_02",
+    "title": "Synthetic Identity Ring Across 4 Connected Accounts",
+    "fraud_type": "Synthetic Identity Fraud Ring",
+    "pre_action": "SOFT_HOLD_2HR",
+    "post_action": "BLOCK_ACCOUNT",
+    "sar_filed": true,
+    "file": "case_02.json"
+  },
+  {
+    "case_id": "CASE_03",
+    "title": "Impossible Velocity - NY to London Within 45 Minutes",
+    "fraud_type": "Rapid Geolocation Shift & Impossible Travel",
+    "pre_action": "BLOCK_CARD",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": false,
+    "file": "case_03.json"
+  },
+  {
+    "case_id": "CASE_04",
+    "title": "Automated Emulator Farm Checkout Burst",
+    "fraud_type": "Device Spoofing & Emulator Farm",
+    "pre_action": "BLOCK_CARD",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": false,
+    "file": "case_04.json"
+  },
+  {
+    "case_id": "CASE_05",
+    "title": "Bust-Out Spree on Dormant Platinum Credit Line",
+    "fraud_type": "Bust-Out / First-Party Credit Depletion",
+    "pre_action": "SOFT_HOLD_2HR",
+    "post_action": "BLOCK_ACCOUNT",
+    "sar_filed": true,
+    "file": "case_05.json"
+  },
+  {
+    "case_id": "CASE_06",
+    "title": "High-Risk Proxy Card Testing Micro-Transactions",
+    "fraud_type": "Card-Not-Present Credential Stuffing & Account Takeover",
+    "pre_action": "REQUEST_STEP_UP_AUTH",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": false,
+    "file": "case_06.json"
+  },
+  {
+    "case_id": "CASE_07",
+    "title": "Legitimate High-Value Traveler (VIP False Positive Test)",
+    "fraud_type": "Potential False Positive / Legitimate Unusual Activity",
+    "pre_action": "SOFT_HOLD_2HR",
+    "post_action": "ALLOW_TRANSACTION",
+    "sar_filed": false,
+    "file": "case_07.json"
+  },
+  {
+    "case_id": "CASE_08",
+    "title": "Coordinated Account Takeover with Contact Details Change",
+    "fraud_type": "Card-Not-Present Credential Stuffing & Account Takeover",
+    "pre_action": "SOFT_HOLD_2HR",
+    "post_action": "BLOCK_ACCOUNT",
+    "sar_filed": true,
+    "file": "case_08.json"
+  },
+  {
+    "case_id": "CASE_09",
+    "title": "Multiple Cards Tested in Rapid Sequence Across Subnet",
+    "fraud_type": "Device Spoofing & Emulator Farm",
+    "pre_action": "BLOCK_CARD",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": false,
+    "file": "case_09.json"
+  },
+  {
+    "case_id": "CASE_10",
+    "title": "Uncertain First-Time Merchant Electronics Purchase",
+    "fraud_type": "Anomalous Spending - Insufficient Typology Match",
+    "pre_action": "REQUEST_STEP_UP_AUTH",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": false,
+    "file": "case_10.json"
+  },
+  {
+    "case_id": "CASE_11",
+    "title": "Stolen Card Used on Newly Minted Account",
+    "fraud_type": "Card-Not-Present Credential Stuffing & Account Takeover",
+    "pre_action": "SOFT_HOLD_2HR",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": true,
+    "file": "case_11.json"
+  },
+  {
+    "case_id": "CASE_12",
+    "title": "Shared IP Subnet Linking 5 Fraudulent Loan Applications",
+    "fraud_type": "Synthetic Identity Fraud Ring",
+    "pre_action": "BLOCK_CARD",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": true,
+    "file": "case_12.json"
+  },
+  {
+    "case_id": "CASE_13",
+    "title": "Middle-of-the-Night ATM Withdrawal Attempt Exceeding Limits",
+    "fraud_type": "Card-Not-Present Credential Stuffing & Account Takeover",
+    "pre_action": "SOFT_HOLD_2HR",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": false,
+    "file": "case_13.json"
+  },
+  {
+    "case_id": "CASE_14",
+    "title": "Legitimate Payroll Bonus Deposit & Electronics Purchase",
+    "fraud_type": "Potential False Positive / Legitimate Unusual Activity",
+    "pre_action": "REQUEST_STEP_UP_AUTH",
+    "post_action": "ALLOW_TRANSACTION",
+    "sar_filed": false,
+    "file": "case_14.json"
+  },
+  {
+    "case_id": "CASE_15",
+    "title": "Cross-Border Remittance to High-Risk Jurisdiction",
+    "fraud_type": "Rapid Geolocation Shift & Impossible Travel",
+    "pre_action": "BLOCK_CARD",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": true,
+    "file": "case_15.json"
+  },
+  {
+    "case_id": "CASE_16",
+    "title": "Bursty In-App Game Currency Purchases on Compromised Child Card",
+    "fraud_type": "Card-Not-Present Credential Stuffing & Account Takeover",
+    "pre_action": "REQUEST_STEP_UP_AUTH",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": false,
+    "file": "case_16.json"
+  },
+  {
+    "case_id": "CASE_17",
+    "title": "Commercial Credit Card Dump Testing on SaaS Subscriptions",
+    "fraud_type": "Card-Not-Present Credential Stuffing & Account Takeover",
+    "pre_action": "REQUEST_STEP_UP_AUTH",
+    "post_action": "BLOCK_CARD",
+    "sar_filed": false,
+    "file": "case_17.json"
+  },
+  {
+    "case_id": "CASE_18",
+    "title": "Structuring Pattern Evading $10,000 Currency Reporting",
+    "fraud_type": "Structuring / Smurfing to Evade CTR Reporting",
+    "pre_action": "SOFT_HOLD_2HR",
+    "post_action": "BLOCK_ACCOUNT",
+    "sar_filed": true,
+    "file": "case_18.json"
+  },
+  {
+    "case_id": "CASE_19",
+    "title": "False Alarm - Recurring Annual Insurance Premium",
+    "fraud_type": "Potential False Positive / Legitimate Unusual Activity",
+    "pre_action": "SOFT_HOLD_2HR",
+    "post_action": "ALLOW_TRANSACTION",
+    "sar_filed": false,
+    "file": "case_19.json"
+  },
+  {
+    "case_id": "CASE_20",
+    "title": "Sophisticated Multi-Hop Bust-Out with Stolen Identity",
+    "fraud_type": "Bust-Out / First-Party Credit Depletion",
+    "pre_action": "SOFT_HOLD_2HR",
+    "post_action": "BLOCK_ACCOUNT",
+    "sar_filed": true,
+    "file": "case_20.json"
+  }
+]

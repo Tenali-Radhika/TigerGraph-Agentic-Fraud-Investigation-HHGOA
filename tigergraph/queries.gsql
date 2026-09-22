@@ -1,0 +1,134 @@
+// ============================================================================
+// TigerGraph GSQL Queries for Agentic Fraud Investigation (HHGOA Hackathon)
+// ============================================================================
+
+USE GRAPH FraudGraph
+
+// ----------------------------------------------------------------------------
+// 1. Multi-hop Fraud Ring Detection
+// Finds accounts sharing devices or IP addresses within 2-3 hops
+// ----------------------------------------------------------------------------
+CREATE QUERY fraud_ring_detection(VERTEX<Transaction> targetTx, INT maxHops) FOR GRAPH FraudGraph {
+    ListAccum<EDGE> @@edgesList;
+    SetAccum<VERTEX> @@visitedNodes;
+    SetAccum<VERTEX<Account>> @@connectedAccounts;
+    OrAccum @visited = false;
+
+    StartTx = {targetTx};
+
+    // Hop 1: Transaction -> Account, Device, IP
+    Hop1 = SELECT tgt FROM StartTx:s -((TRANSACTION_BY|ON_DEVICE|FROM_IP):e)-> :tgt
+           ACCUM @@edgesList += e, tgt.@visited = true;
+
+    // Hop 2: Device/IP -> Connected Transactions / Accounts
+    Hop2 = SELECT tgt FROM Hop1:s -((DEVICE_TRANSACTED|IP_TRANSACTIONS|SHARES_DEVICE|SHARES_IP):e)-> :tgt
+           WHERE tgt.@visited == false
+           ACCUM @@edgesList += e, tgt.@visited = true
+           POST-ACCUM 
+               CASE WHEN tgt.type == "Account" THEN @@connectedAccounts += tgt END;
+
+    // Hop 3: Expand connected accounts
+    Hop3 = SELECT tgt FROM Hop2:s -((MADE_TRANSACTION|USED_CARD):e)-> :tgt
+           WHERE tgt.@visited == false AND maxHops >= 3
+           ACCUM @@edgesList += e, tgt.@visited = true;
+
+    PRINT @@connectedAccounts.size() AS ringSize, @@connectedAccounts, @@edgesList;
+}
+
+// ----------------------------------------------------------------------------
+// 2. Velocity and Bursts Check
+// Computes transaction frequency, total amount, and device churn in time window
+// ----------------------------------------------------------------------------
+CREATE QUERY velocity_check(VERTEX<Account> targetAcc, INT windowSeconds) FOR GRAPH FraudGraph {
+    SumAccum<INT> @@txCount = 0;
+    SumAccum<DOUBLE> @@totalAmount = 0.0;
+    SetAccum<VERTEX<Device>> @@distinctDevices;
+    SetAccum<VERTEX<IP_Address>> @@distinctIPs;
+    MaxAccum<INT> @@maxDT = 0;
+    MinAccum<INT> @@minDT = 999999999;
+
+    StartAcc = {targetAcc};
+
+    TxSet = SELECT t FROM StartAcc:s -(MADE_TRANSACTION:e)-> Transaction:t
+            ACCUM 
+                @@txCount += 1,
+                @@totalAmount += t.amount,
+                @@maxDT += t.transactionDT,
+                @@minDT += t.transactionDT;
+
+    DevSet = SELECT d FROM TxSet:t -(ON_DEVICE:e)-> Device:d
+             ACCUM @@distinctDevices += d;
+
+    IPSet = SELECT ip FROM TxSet:t -(FROM_IP:e)-> IP_Address:ip
+            ACCUM @@distinctIPs += ip;
+
+    PRINT @@txCount AS transactionCount, 
+          @@totalAmount AS totalVolume, 
+          @@distinctDevices.size() AS deviceCount, 
+          @@distinctIPs.size() AS ipCount,
+          (@@maxDT - @@minDT) AS timeSpanSeconds;
+}
+
+// ----------------------------------------------------------------------------
+// 3. Pattern Matching: Account Takeover & Card-Not-Present Stuffing
+// Detects high-velocity attempts across distinct cards on a single device/IP
+// ----------------------------------------------------------------------------
+CREATE QUERY detect_credential_stuffing(VERTEX<Device> targetDev) FOR GRAPH FraudGraph {
+    SetAccum<VERTEX<Card>> @@distinctCards;
+    SetAccum<VERTEX<Account>> @@distinctAccounts;
+    SumAccum<INT> @@flaggedCount = 0;
+
+    StartDev = {targetDev};
+
+    Txs = SELECT t FROM StartDev:d -(DEVICE_TRANSACTED:e)-> Transaction:t
+          ACCUM 
+              CASE WHEN t.isFlagged == true THEN @@flaggedCount += 1 END;
+
+    Cards = SELECT c FROM Txs:t -(USED_CARD:e)-> Card:c
+            ACCUM @@distinctCards += c;
+
+    Accs = SELECT a FROM Txs:t -(TRANSACTION_BY:e)-> Account:a
+           ACCUM @@distinctAccounts += a;
+
+    PRINT @@distinctCards.size() AS distinctCardsCount,
+          @@distinctAccounts.size() AS distinctAccountsCount,
+          @@flaggedCount AS flaggedTxCount,
+          (@@distinctCards.size() > 3 AND @@distinctAccounts.size() > 2) AS isStuffingPattern;
+}
+
+// ----------------------------------------------------------------------------
+// 4. Case Memory Search by Graph Topology & Outcome Similarity
+// Retrieves resolved cases with similar transaction amount or pattern
+// ----------------------------------------------------------------------------
+CREATE QUERY retrieve_similar_cases(STRING targetPattern, DOUBLE minConfidence, INT maxResults) FOR GRAPH FraudGraph {
+    ListAccum<VERTEX<CaseMemory>> @@matchedCases;
+
+    AllCases = {CaseMemory.*};
+
+    FilteredCases = SELECT c FROM AllCases:c
+                    WHERE c.patternMatched == targetPattern
+                    LIMIT maxResults;
+
+    PRINT FilteredCases;
+}
+
+// ----------------------------------------------------------------------------
+// 5. Complete Subgraph Extraction for Case Visualization & GraphRAG
+// Extracts 2-hop radius around target transaction
+// ----------------------------------------------------------------------------
+CREATE QUERY get_case_subgraph(STRING txId) FOR GRAPH FraudGraph {
+    SetAccum<VERTEX> @@vertices;
+    ListAccum<EDGE> @@edges;
+
+    StartTx = SELECT t FROM Transaction:t WHERE t.transactionId == txId;
+
+    Hop1 = SELECT tgt FROM StartTx:s -(:e)-> :tgt
+           ACCUM @@vertices += s, @@vertices += tgt, @@edges += e;
+
+    Hop2 = SELECT tgt FROM Hop1:s -(:e)-> :tgt
+           ACCUM @@vertices += tgt, @@edges += e;
+
+    PRINT @@vertices, @@edges;
+}
+
+INSTALL QUERY fraud_ring_detection, velocity_check, detect_credential_stuffing, retrieve_similar_cases, get_case_subgraph;

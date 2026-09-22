@@ -1,0 +1,209 @@
+{
+  "case_id": "CASE_05",
+  "case_title": "Bust-Out Spree on Dormant Platinum Credit Line",
+  "transaction_id": "TX_3042190",
+  "trigger": {
+    "type": "analyst_request",
+    "initial_risk_score": 0.81,
+    "reason": "Fraud Analyst flagged account for sudden utilization spike to 98% of credit limit in 24 hours."
+  },
+  "investigation_record": [
+    {
+      "step": "TRIGGER",
+      "timestamp": "2026-09-22T08:52:36.459381",
+      "details": "Investigation triggered for TX_3042190 via analyst_request with initial risk score 0.81"
+    },
+    {
+      "step": "CASE_PROGRESSION",
+      "timestamp": "2026-09-22T08:52:36.465071",
+      "details": "FraudCase CASE_05 recorded in TigerGraph with status INVESTIGATING"
+    },
+    {
+      "step": "EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.470572",
+      "details": "Gathered 2 evidence items from TigerGraph (Ring Size: 0, Subgraph Nodes: 6)"
+    },
+    {
+      "step": "PATTERN_DETECTION",
+      "timestamp": "2026-09-22T08:52:36.476481",
+      "details": "Identified 2 matching typologies. Primary: Bust-Out / First-Party Credit Depletion (Calculated Fraud Prob: 0.93)"
+    },
+    {
+      "step": "UNCERTAINTY_ASSESSMENT",
+      "timestamp": "2026-09-22T08:52:36.480692",
+      "details": "Assessed confidence at 74% (MEDIUM). Evidence Gaps: 1. Needs more evidence: True."
+    },
+    {
+      "step": "CONTROLLED_EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.486730",
+      "details": "Dispatched controlled inquiries (REQUEST_CUSTOMER_TRANSACTION_VALIDATION, TRIGGER_STEP_UP_BIOMETRIC_AUTH, QUERY_EXTERNAL_BREACH_INTELLIGENCE). Received response: Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy."
+    },
+    {
+      "step": "ACTION_RECOMMENDATION",
+      "timestamp": "2026-09-22T08:52:36.492379",
+      "details": "Recommended Next Best Action: BLOCK_ACCOUNT (Route: SENIOR_ANALYST). SAR Required: True."
+    },
+    {
+      "step": "HUMAN_APPROVAL_GATE",
+      "timestamp": "2026-09-22T08:52:36.495791",
+      "details": "Action 'BLOCK_ACCOUNT' escalated to SENIOR_ANALYST for authorization. Status: APPROVED with audit sign-off."
+    },
+    {
+      "step": "MEMORY_UPDATE",
+      "timestamp": "2026-09-22T08:52:36.497741",
+      "details": "Investigation findings, actions, and vector embedding stored in TigerGraph CaseMemory (MEM_CASE_05). Case marked RESOLVED."
+    }
+  ],
+  "evidence": {
+    "evidence_trail": [
+      {
+        "evidence_id": "EV_GRAPH_01",
+        "source": "TigerGraph_MultiHop",
+        "timestamp": "2026-09-22T08:52:36.469950",
+        "title": "Single Account Entity Association",
+        "description": "No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.",
+        "risk_contribution": -0.1,
+        "data": {
+          "ring_size": 0,
+          "connected_accounts": [],
+          "linked_transactions_count": 0,
+          "shared_devices": [
+            "DEV_MAC_CHROME_88"
+          ],
+          "shared_ips": [
+            "172.56.21.90"
+          ]
+        }
+      },
+      {
+        "evidence_id": "EV_VELOCITY_02",
+        "source": "Velocity_Engine",
+        "timestamp": "2026-09-22T08:52:36.470161",
+        "title": "High Transaction Velocity Spike",
+        "description": "Account executed 1 transactions totaling $14,200.00 in rolling 24-hour window.",
+        "risk_contribution": 0.65,
+        "data": {
+          "tx_count": 1,
+          "total_volume": 14200.0,
+          "device_count": 1,
+          "ip_count": 1,
+          "avg_amount": 14200.0
+        }
+      }
+    ],
+    "graph_ring_size": 0,
+    "connected_accounts": [],
+    "velocity_metrics": {
+      "tx_count": 1,
+      "total_volume": 14200.0,
+      "device_count": 1,
+      "ip_count": 1,
+      "avg_amount": 14200.0
+    },
+    "device_signals": {
+      "device_id": "DEV_MAC_CHROME_88",
+      "ip_address": "172.56.21.90",
+      "is_suspicious_fingerprint": false,
+      "device_type": "STANDARD_BROWSER"
+    }
+  },
+  "findings": {
+    "fraud_probability": 0.93,
+    "confidence_score": 0.74,
+    "confidence_level": "MEDIUM",
+    "likely_fraud_type": "Bust-Out / First-Party Credit Depletion",
+    "pattern_matches": [
+      {
+        "pattern_id": "PAT-005",
+        "pattern_name": "Bust-Out / First-Party Credit Depletion",
+        "typology": "First-Party Fraud / Credit Bust-Out",
+        "confidence": 0.93,
+        "matched_indicators": [
+          "Abnormal lump-sum amount ($14,200.00) on high-liquidity merchant category",
+          "Credit limit utilization exceeding 90% in single authorization",
+          "Deviation from historical account median volume"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "pattern_id": "PAT-001",
+        "pattern_name": "Card-Not-Present Credential Stuffing & Account Takeover",
+        "typology": "Account Takeover / Automated Attack",
+        "confidence": 0.74,
+        "matched_indicators": [
+          "Elevated ML fraud risk score above 0.80 threshold"
+        ],
+        "severity": "HIGH"
+      }
+    ],
+    "evidence_gaps": [
+      "Independent verification of customer travel status or device authorization pending"
+    ]
+  },
+  "next_best_action": {
+    "before_additional_evidence": {
+      "action": "SOFT_HOLD_2HR",
+      "rationale": "Elevated risk signals present with high uncertainty. Soft hold and step-up auth requested prior to destructive block.",
+      "required_approval_route": "NONE",
+      "requires_approval": false
+    },
+    "additional_evidence_requested": [
+      "REQUEST_CUSTOMER_TRANSACTION_VALIDATION",
+      "TRIGGER_STEP_UP_BIOMETRIC_AUTH",
+      "QUERY_EXTERNAL_BREACH_INTELLIGENCE"
+    ],
+    "additional_evidence_received": {
+      "source": "Step_Up_MFA_Challenge",
+      "status": "FAILED_NO_RESPONSE",
+      "is_cleared": false,
+      "summary": "Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy.",
+      "timestamp": "2026-09-22T08:52:36.486691"
+    },
+    "after_additional_evidence": {
+      "action": "BLOCK_ACCOUNT",
+      "rationale": "Additional evidence confirmed unauthorized access (Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy.). Permanent mitigation required.",
+      "required_approval_route": "SENIOR_ANALYST",
+      "requires_approval": true
+    }
+  },
+  "written_to_tigergraph": {
+    "vertex": "FraudCase",
+    "vertex_id": "CASE_05",
+    "status": "RESOLVED",
+    "case_memory_id": "MEM_CASE_05"
+  },
+  "suspicious_activity_report": {
+    "sar_id": "SAR-FINCEN-20260922-2594BF",
+    "filing_institution": {
+      "institution_name": "Horizon Federal Bank & Trust",
+      "fincen_identifier": "HFBT-US-77402",
+      "regulatory_agency": "OCC",
+      "city": "Charlotte",
+      "state": "NC",
+      "country": "US"
+    },
+    "subject_information": {
+      "account_id": "ACC_11094",
+      "card_id": "CARD_992100",
+      "device_id": "DEV_MAC_CHROME_88",
+      "ip_address": "172.56.21.90",
+      "associated_accounts": []
+    },
+    "suspicious_activity": {
+      "primary_type": "Bust-Out / First-Party Credit Depletion",
+      "typology_code": "ACCOUNT_TAKEOVER",
+      "transaction_count": 2,
+      "total_suspicious_amount": 14200.0,
+      "date_range_start": "2026-08-14T22:04:18Z",
+      "date_range_end": "2026-09-22T08:52:36.492221"
+    },
+    "narrative": "PART I - SUBJECT & ACTIVITY OVERVIEW:\nHorizon Federal Bank & Trust is filing this Suspicious Activity Report (SAR) pursuant to 31 U.S.C. 5318(g) concerning suspected financial crimes categorized under 'Bust-Out / First-Party Credit Depletion'. The primary target transaction TX_3042190 totaled $14,200.00 USD on account ACC_11094, utilizing payment card CARD_992100.\n\nPART II - TIGERGRAPH KNOWLEDGE GRAPH INVESTIGATION FINDINGS:\nTigerGraph multi-hop topological graph analysis revealed that originating device 'DEV_MAC_CHROME_88' and IP '172.56.21.90' are linked to a coordinated ring of 0 interrelated accounts: ACC_11094. Network connection patterns indicate synchronized unauthorized authorization attempts and high-velocity fund dissipation.\n\nPART III - CHRONOLOGICAL EVIDENCE TRAIL:\n- [2026-09-22T08:52:36.469950] TigerGraph_MultiHop: Single Account Entity Association - No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.\n- [2026-09-22T08:52:36.470161] Velocity_Engine: High Transaction Velocity Spike - Account executed 1 transactions totaling $14,200.00 in rolling 24-hour window.\n\nPART IV - NEXT BEST ACTIONS & DISPOSITION:\nHorizon Federal Bank automated fraud agents, under supervisory authorization, executed immediate account freezing, revoked associated card authorizations, and preserved transaction audit trails. All related entities have been tagged for AML watchlist monitoring. This report is submitted for FinCEN review.",
+    "compliance_signoff": {
+      "officer_name": "Chief Compliance Officer",
+      "title": "BSA/AML Compliance Officer",
+      "approval_date": "2026-09-22",
+      "status": "APPROVED_FOR_FILING"
+    }
+  },
+  "explainability_narrative": "Investigation opened for Transaction TX_3042190 ($14,200.00 USD) triggered by analyst_request. TigerGraph multi-hop analysis identified 0 connected accounts sharing device and network infrastructure. Topological and signature matching flagged primary typology as 'Bust-Out / First-Party Credit Depletion' with confidence of 74%. Prior to additional evidence, next-best action was SOFT_HOLD_2HR (Approval: NONE). Additional evidence gathered: 'Customer SMS OTP challenge expired without confirmation. Originating IP geolocation confirmed blacklisted residential proxy.'. Post-evidence updated next-best action transitioned to BLOCK_ACCOUNT with route SENIOR_ANALYST. Due to aggregate exposure exceeding statutory thresholds, a FinCEN Suspicious Activity Report (Form 111) was automatically drafted for compliance review."
+}

@@ -1,0 +1,230 @@
+{
+  "case_id": "CASE_12",
+  "case_title": "Shared IP Subnet Linking 5 Fraudulent Loan Applications",
+  "transaction_id": "TX_3063412",
+  "trigger": {
+    "type": "analyst_request",
+    "initial_risk_score": 0.85,
+    "reason": "Graph linkage analysis revealed IP address associated with multiple defaulted lending applications."
+  },
+  "investigation_record": [
+    {
+      "step": "TRIGGER",
+      "timestamp": "2026-09-22T08:52:36.699033",
+      "details": "Investigation triggered for TX_3063412 via analyst_request with initial risk score 0.85"
+    },
+    {
+      "step": "CASE_PROGRESSION",
+      "timestamp": "2026-09-22T08:52:36.701890",
+      "details": "FraudCase CASE_12 recorded in TigerGraph with status INVESTIGATING"
+    },
+    {
+      "step": "EVIDENCE_GATHERING",
+      "timestamp": "2026-09-22T08:52:36.704388",
+      "details": "Gathered 3 evidence items from TigerGraph (Ring Size: 0, Subgraph Nodes: 9)"
+    },
+    {
+      "step": "PATTERN_DETECTION",
+      "timestamp": "2026-09-22T08:52:36.706054",
+      "details": "Identified 4 matching typologies. Primary: Synthetic Identity Fraud Ring (Calculated Fraud Prob: 0.94)"
+    },
+    {
+      "step": "UNCERTAINTY_ASSESSMENT",
+      "timestamp": "2026-09-22T08:52:36.707664",
+      "details": "Assessed confidence at 84% (HIGH). Evidence Gaps: 0. Needs more evidence: False."
+    },
+    {
+      "step": "ACTION_RECOMMENDATION",
+      "timestamp": "2026-09-22T08:52:36.711103",
+      "details": "Recommended Next Best Action: BLOCK_CARD (Route: ANALYST_TIER_1). SAR Required: True."
+    },
+    {
+      "step": "HUMAN_APPROVAL_GATE",
+      "timestamp": "2026-09-22T08:52:36.713831",
+      "details": "Action 'BLOCK_CARD' escalated to ANALYST_TIER_1 for authorization. Status: APPROVED with audit sign-off."
+    },
+    {
+      "step": "MEMORY_UPDATE",
+      "timestamp": "2026-09-22T08:52:36.716546",
+      "details": "Investigation findings, actions, and vector embedding stored in TigerGraph CaseMemory (MEM_CASE_12). Case marked RESOLVED."
+    }
+  ],
+  "evidence": {
+    "evidence_trail": [
+      {
+        "evidence_id": "EV_GRAPH_01",
+        "source": "TigerGraph_MultiHop",
+        "timestamp": "2026-09-22T08:52:36.703956",
+        "title": "Single Account Entity Association",
+        "description": "No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.",
+        "risk_contribution": -0.1,
+        "data": {
+          "ring_size": 0,
+          "connected_accounts": [],
+          "linked_transactions_count": 0,
+          "shared_devices": [
+            "DEV_RESIDENTIAL_PROXY_5"
+          ],
+          "shared_ips": [
+            "192.0.2.199"
+          ]
+        }
+      },
+      {
+        "evidence_id": "EV_VELOCITY_02",
+        "source": "Velocity_Engine",
+        "timestamp": "2026-09-22T08:52:36.704070",
+        "title": "High Transaction Velocity Spike",
+        "description": "Account executed 1 transactions totaling $9,500.00 in rolling 24-hour window.",
+        "risk_contribution": 0.65,
+        "data": {
+          "tx_count": 1,
+          "total_volume": 9500.0,
+          "device_count": 1,
+          "ip_count": 1,
+          "avg_amount": 9500.0
+        }
+      },
+      {
+        "evidence_id": "EV_DEVICE_03",
+        "source": "Device_Fingerprint",
+        "timestamp": "2026-09-22T08:52:36.704096",
+        "title": "Suspicious Device / Network Signature",
+        "description": "Originating fingerprint exhibits emulator, proxy, or bot characteristics (DEV_RESIDENTIAL_PROXY_5 / 192.0.2.199).",
+        "risk_contribution": 0.8,
+        "data": {
+          "device_id": "DEV_RESIDENTIAL_PROXY_5",
+          "ip_address": "192.0.2.199",
+          "is_suspicious_fingerprint": true,
+          "device_type": "EMULATOR/HEADLESS"
+        }
+      }
+    ],
+    "graph_ring_size": 0,
+    "connected_accounts": [],
+    "velocity_metrics": {
+      "tx_count": 1,
+      "total_volume": 9500.0,
+      "device_count": 1,
+      "ip_count": 1,
+      "avg_amount": 9500.0
+    },
+    "device_signals": {
+      "device_id": "DEV_RESIDENTIAL_PROXY_5",
+      "ip_address": "192.0.2.199",
+      "is_suspicious_fingerprint": true,
+      "device_type": "EMULATOR/HEADLESS"
+    }
+  },
+  "findings": {
+    "fraud_probability": 0.94,
+    "confidence_score": 0.84,
+    "confidence_level": "HIGH",
+    "likely_fraud_type": "Synthetic Identity Fraud Ring",
+    "pattern_matches": [
+      {
+        "pattern_id": "PAT-002",
+        "pattern_name": "Synthetic Identity Fraud Ring",
+        "typology": "Organized Financial Crime Ring",
+        "confidence": 0.94,
+        "matched_indicators": [
+          "Cluster of 0 interrelated accounts sharing device/IP infrastructure",
+          "High aggregate velocity across co-located account nodes",
+          "Rapid fund dissipation patterns"
+        ],
+        "severity": "CRITICAL"
+      },
+      {
+        "pattern_id": "PAT-006",
+        "pattern_name": "Structuring / Smurfing to Evade CTR Reporting",
+        "typology": "BSA/AML Structuring Violation",
+        "confidence": 0.91,
+        "matched_indicators": [
+          "Transaction amount $9,500.00 is suspiciously close to but below $10,000 CTR threshold",
+          "Pattern of transactions designed to circumvent Currency Transaction Reporting",
+          "Historical transaction fragmentation consistent with smurfing behavior"
+        ],
+        "severity": "CRITICAL"
+      },
+      {
+        "pattern_id": "PAT-005",
+        "pattern_name": "Bust-Out / First-Party Credit Depletion",
+        "typology": "First-Party Fraud / Credit Bust-Out",
+        "confidence": 0.89,
+        "matched_indicators": [
+          "Abnormal lump-sum amount ($9,500.00) on high-liquidity merchant category",
+          "Credit limit utilization exceeding 90% in single authorization",
+          "Deviation from historical account median volume"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "pattern_id": "PAT-001",
+        "pattern_name": "Card-Not-Present Credential Stuffing & Account Takeover",
+        "typology": "Account Takeover / Automated Attack",
+        "confidence": 0.74,
+        "matched_indicators": [
+          "Anonymizing proxy/TOR detected in device: DEV_RESIDENTIAL_PROXY_5"
+        ],
+        "severity": "HIGH"
+      }
+    ],
+    "evidence_gaps": []
+  },
+  "next_best_action": {
+    "before_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Definite fraud indicators detected (Synthetic Identity Fraud Ring). Immediate block recommended.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    },
+    "additional_evidence_requested": [],
+    "additional_evidence_received": null,
+    "after_additional_evidence": {
+      "action": "BLOCK_CARD",
+      "rationale": "Definite fraud indicators detected (Synthetic Identity Fraud Ring). Immediate block recommended.",
+      "required_approval_route": "ANALYST_TIER_1",
+      "requires_approval": true
+    }
+  },
+  "written_to_tigergraph": {
+    "vertex": "FraudCase",
+    "vertex_id": "CASE_12",
+    "status": "RESOLVED",
+    "case_memory_id": "MEM_CASE_12"
+  },
+  "suspicious_activity_report": {
+    "sar_id": "SAR-FINCEN-20260922-3E95EF",
+    "filing_institution": {
+      "institution_name": "Horizon Federal Bank & Trust",
+      "fincen_identifier": "HFBT-US-77402",
+      "regulatory_agency": "OCC",
+      "city": "Charlotte",
+      "state": "NC",
+      "country": "US"
+    },
+    "subject_information": {
+      "account_id": "ACC_12093",
+      "card_id": "CARD_339102",
+      "device_id": "DEV_RESIDENTIAL_PROXY_5",
+      "ip_address": "192.0.2.199",
+      "associated_accounts": []
+    },
+    "suspicious_activity": {
+      "primary_type": "Synthetic Identity Fraud Ring",
+      "typology_code": "ACCOUNT_TAKEOVER",
+      "transaction_count": 2,
+      "total_suspicious_amount": 9500.0,
+      "date_range_start": "2026-09-01T13:40:00Z",
+      "date_range_end": "2026-09-22T08:52:36.710885"
+    },
+    "narrative": "PART I - SUBJECT & ACTIVITY OVERVIEW:\nHorizon Federal Bank & Trust is filing this Suspicious Activity Report (SAR) pursuant to 31 U.S.C. 5318(g) concerning suspected financial crimes categorized under 'Synthetic Identity Fraud Ring'. The primary target transaction TX_3063412 totaled $9,500.00 USD on account ACC_12093, utilizing payment card CARD_339102.\n\nPART II - TIGERGRAPH KNOWLEDGE GRAPH INVESTIGATION FINDINGS:\nTigerGraph multi-hop topological graph analysis revealed that originating device 'DEV_RESIDENTIAL_PROXY_5' and IP '192.0.2.199' are linked to a coordinated ring of 0 interrelated accounts: ACC_12093. Network connection patterns indicate synchronized unauthorized authorization attempts and high-velocity fund dissipation.\n\nPART III - CHRONOLOGICAL EVIDENCE TRAIL:\n- [2026-09-22T08:52:36.703956] TigerGraph_MultiHop: Single Account Entity Association - No immediate multi-party fraud ring observed across 2-hop device/IP neighborhood.\n- [2026-09-22T08:52:36.704070] Velocity_Engine: High Transaction Velocity Spike - Account executed 1 transactions totaling $9,500.00 in rolling 24-hour window.\n- [2026-09-22T08:52:36.704096] Device_Fingerprint: Suspicious Device / Network Signature - Originating fingerprint exhibits emulator, proxy, or bot characteristics (DEV_RESIDENTIAL_PROXY_5 / 192.0.2.199).\n\nPART IV - NEXT BEST ACTIONS & DISPOSITION:\nHorizon Federal Bank automated fraud agents, under supervisory authorization, executed immediate account freezing, revoked associated card authorizations, and preserved transaction audit trails. All related entities have been tagged for AML watchlist monitoring. This report is submitted for FinCEN review.",
+    "compliance_signoff": {
+      "officer_name": "Chief Compliance Officer",
+      "title": "BSA/AML Compliance Officer",
+      "approval_date": "2026-09-22",
+      "status": "APPROVED_FOR_FILING"
+    }
+  },
+  "explainability_narrative": "Investigation opened for Transaction TX_3063412 ($9,500.00 USD) triggered by analyst_request. TigerGraph multi-hop analysis identified 0 connected accounts sharing device and network infrastructure. Topological and signature matching flagged primary typology as 'Synthetic Identity Fraud Ring' with confidence of 84%. Prior to additional evidence, next-best action was BLOCK_CARD (Approval: ANALYST_TIER_1). Due to aggregate exposure exceeding statutory thresholds, a FinCEN Suspicious Activity Report (Form 111) was automatically drafted for compliance review."
+}
