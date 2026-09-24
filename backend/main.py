@@ -69,21 +69,35 @@ def list_cases():
     cases = get_all_benchmark_manifest()
     results = []
     
-    # Check submissions directory for resolved data
+    results = []
+    
+    # Check cases directory (official HHGOA requirement) and submissions fallback
+    cases_dir = os.path.join(os.path.dirname(__file__), "..", "cases")
     submissions_dir = os.path.join(os.path.dirname(__file__), "..", "submissions")
-    for c in cases:
+
+    for idx, c in enumerate(cases, 1):
         c_id = c["case_id"]
-        c_file = os.path.join(submissions_dir, f"{c_id.lower()}.json")
-        is_resolved = os.path.exists(c_file)
+        hhg_id = f"HHG-{idx:03d}"
+        
+        # Check potential file locations: cases/HHG-001.json, submissions/case_01.json
+        candidate_files = [
+            os.path.join(cases_dir, f"{hhg_id}.json"),
+            os.path.join(cases_dir, f"{c_id}.json"),
+            os.path.join(submissions_dir, f"{c_id.lower()}.json"),
+            os.path.join(submissions_dir, f"case_{idx:02d}.json")
+        ]
+        
+        found_file = next((f for f in candidate_files if os.path.exists(f)), None)
+        is_resolved = found_file is not None
         
         sar_filed = False
         likely_fraud = "Pending Investigation"
         pre_act = "SOFT_HOLD_2HR"
         post_act = "PENDING"
         
-        if is_resolved:
+        if is_resolved and found_file:
             try:
-                with open(c_file, "r", encoding="utf-8") as f:
+                with open(found_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     sar_filed = data.get("suspicious_activity_report") is not None
                     likely_fraud = data.get("findings", {}).get("likely_fraud_type", likely_fraud)
@@ -93,7 +107,8 @@ def list_cases():
                 pass
 
         results.append({
-            "case_id": c_id,
+            "case_id": hhg_id,
+            "case_id_alt": c_id,
             "title": c["case_title"],
             "transaction_id": c["transaction_id"],
             "amount": c["transaction_details"]["amount"],
@@ -111,12 +126,34 @@ def list_cases():
 def get_case_detail(case_id: str):
     """Retrieves full case investigation record, evidence, SAR, and Next Best Actions."""
     case_id_clean = case_id.upper()
+    cases_dir = os.path.join(os.path.dirname(__file__), "..", "cases")
     submissions_dir = os.path.join(os.path.dirname(__file__), "..", "submissions")
-    file_path = os.path.join(submissions_dir, f"{case_id_clean.lower()}.json")
 
-    if os.path.exists(file_path):
-        with open(file_path, "r", encoding="utf-8") as f:
-            return json.load(f)
+    candidate_files = [
+        os.path.join(cases_dir, f"{case_id_clean}.json"),
+        os.path.join(cases_dir, f"{case_id.lower()}.json"),
+        os.path.join(submissions_dir, f"{case_id_clean.lower()}.json"),
+        os.path.join(submissions_dir, f"{case_id}.json"),
+    ]
+
+    # Map between CASE_01 and HHG-001 if needed
+    if case_id_clean.startswith("CASE_"):
+        try:
+            num = int(case_id_clean.split("_")[1])
+            candidate_files.append(os.path.join(cases_dir, f"HHG-{num:03d}.json"))
+        except Exception:
+            pass
+    elif case_id_clean.startswith("HHG-"):
+        try:
+            num = int(case_id_clean.split("-")[1])
+            candidate_files.append(os.path.join(submissions_dir, f"case_{num:02d}.json"))
+        except Exception:
+            pass
+
+    for fp in candidate_files:
+        if os.path.exists(fp):
+            with open(fp, "r", encoding="utf-8") as f:
+                return json.load(f)
 
     # Check active cache
     if case_id_clean in ACTIVE_CASES_CACHE:
@@ -246,21 +283,26 @@ def graph_rag_chat(req: GraphRAGQuery):
 @app.get("/api/benchmark/summary")
 def get_benchmark_summary():
     """Returns summary stats of the 20 benchmark cases."""
-    summary_path = os.path.join(os.path.dirname(__file__), "..", "submissions", "benchmark_summary.json")
-    if os.path.exists(summary_path):
-        with open(summary_path, "r", encoding="utf-8") as f:
-            return json.load(f)
+    cases_summary = os.path.join(os.path.dirname(__file__), "..", "cases", "benchmark_summary.json")
+    submissions_summary = os.path.join(os.path.dirname(__file__), "..", "submissions", "benchmark_summary.json")
+    for sp in [cases_summary, submissions_summary]:
+        if os.path.exists(sp):
+            with open(sp, "r", encoding="utf-8") as f:
+                return json.load(f)
     return []
 
 @app.get("/api/benchmark/download-all")
 def download_all_submissions():
     """Packages all 20 submission answer files into a downloadable ZIP archive."""
+    cases_dir = os.path.join(os.path.dirname(__file__), "..", "cases")
     submissions_dir = os.path.join(os.path.dirname(__file__), "..", "submissions")
+    target_dir = cases_dir if os.path.exists(cases_dir) else submissions_dir
+
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
-        for fname in os.listdir(submissions_dir):
+        for fname in os.listdir(target_dir):
             if fname.endswith(".json"):
-                fpath = os.path.join(submissions_dir, fname)
+                fpath = os.path.join(target_dir, fname)
                 zip_file.write(fpath, arcname=fname)
 
     zip_buffer.seek(0)

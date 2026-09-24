@@ -32,7 +32,7 @@
 
 5. **20 Benchmark Evaluation Cases**:
    - All 20 benchmark test cases executed end-to-end.
-   - Output files stored in `submissions/case_01.json` ... `submissions/case_20.json`.
+   - Answer files stored in `cases/HHG-001.json` ... `cases/HHG-020.json` (as scored directly by HHGOA organizers) and mirrored in `submissions/`.
    - One-click ZIP download available directly from the UI.
 
 6. **Interactive Analyst Workbench**:
@@ -47,6 +47,7 @@
 
 ```
 TigerGraph Agentic Fraud Investigation HHGOA/
+├── cases/                      # Official HHGOA 20 answer files (HHG-001.json ... HHG-020.json)
 ├── tigergraph/
 │   ├── schema.gsql             # Vertex and edge DDL for FraudGraph
 │   ├── queries.gsql            # Installed GSQL graph traversal & detection queries
@@ -77,7 +78,7 @@ TigerGraph Agentic Fraud Investigation HHGOA/
 │   │   └── App.tsx
 │   └── package.json
 │
-├── submissions/                # 20 benchmark answer files (case_01.json ... case_20.json)
+├── submissions/                # Mirrored answer files (case_01.json ... case_20.json)
 └── docs/
     └── architecture.md         # Technical architecture blog post
 ```
@@ -94,7 +95,7 @@ TigerGraph Agentic Fraud Investigation HHGOA/
 ```bash
 python -m data.benchmark_runner
 ```
-*Evaluates all 20 benchmark cases and writes `submissions/case_01.json` through `case_20.json`.*
+*Evaluates all 20 benchmark cases and writes `cases/HHG-001.json` through `cases/HHG-020.json` (plus `submissions/`).*
 
 ### 3. Launch Backend Server
 ```bash
@@ -133,26 +134,26 @@ TG_SECRET=your_graph_secret
 
 | Case | Scenario Title | Primary Typology | Pre-Evidence Action | Post-Evidence Action | SAR Filed |
 |---|---|---|---|---|---|
-| **CASE_01** | Multi-Card Velocity Spike on Mobile Device | Device Spoofing & Emulator Farm | BLOCK_CARD | BLOCK_CARD | Yes |
-| **CASE_02** | Synthetic Identity Ring Across 4 Accounts | Synthetic Identity Fraud Ring | SOFT_HOLD_2HR | BLOCK_ACCOUNT | Yes |
-| **CASE_03** | Impossible Velocity - NY to London (45 min) | Rapid Geolocation Shift & Impossible Travel | BLOCK_CARD | BLOCK_CARD | No |
-| **CASE_04** | Automated Emulator Farm Checkout Burst | Device Spoofing & Emulator Farm | BLOCK_CARD | BLOCK_CARD | No |
-| **CASE_05** | Bust-Out Spree on Dormant Platinum ($14.2k) | Bust-Out / First-Party Credit Depletion | SOFT_HOLD_2HR | BLOCK_ACCOUNT | Yes |
-| **CASE_06** | High-Risk Proxy Card Testing Micro-Txs | Card-Not-Present Credential Stuffing & ATO | REQUEST_STEP_UP_AUTH | BLOCK_CARD | No |
-| **CASE_07** | Legitimate High-Value Traveler (VIP Test) | Potential False Positive / Legitimate Unusual Activity | SOFT_HOLD_2HR | ALLOW_TRANSACTION | No |
-| **CASE_08** | Coordinated ATO with Contact Details Change | Card-Not-Present Credential Stuffing & ATO | SOFT_HOLD_2HR | BLOCK_ACCOUNT | Yes |
-| **CASE_09** | Multiple Cards Tested Rapidly Across Subnet | Device Spoofing & Emulator Farm | BLOCK_CARD | BLOCK_CARD | No |
-| **CASE_10** | Uncertain First-Time Electronics Purchase | Anomalous Spending - Insufficient Typology Match | REQUEST_STEP_UP_AUTH | BLOCK_CARD | No |
-| **CASE_11** | Stolen Card Used on Newly Minted Account | Card-Not-Present Credential Stuffing & ATO | SOFT_HOLD_2HR | BLOCK_CARD | Yes |
-| **CASE_12** | Shared IP Subnet Linking 5 Fraudulent Loans | Synthetic Identity Fraud Ring | BLOCK_CARD | BLOCK_CARD | Yes |
-| **CASE_13** | Middle-of-the-Night ATM Withdrawal Attempt | Card-Not-Present Credential Stuffing & ATO | SOFT_HOLD_2HR | BLOCK_CARD | No |
-| **CASE_14** | Legitimate Payroll Bonus Deposit | Potential False Positive / Legitimate Unusual Activity | REQUEST_STEP_UP_AUTH | ALLOW_TRANSACTION | No |
-| **CASE_15** | Cross-Border Remittance to High-Risk Jurisdiction | Rapid Geolocation Shift & Impossible Travel | BLOCK_CARD | BLOCK_CARD | Yes |
-| **CASE_16** | Bursty In-App Game Currency Purchases | Card-Not-Present Credential Stuffing & ATO | REQUEST_STEP_UP_AUTH | BLOCK_CARD | No |
-| **CASE_17** | Commercial Credit Card Dump Testing on SaaS | Card-Not-Present Credential Stuffing & ATO | REQUEST_STEP_UP_AUTH | BLOCK_CARD | No |
-| **CASE_18** | Structuring Pattern Evading $10,000 CTR | Structuring / Smurfing to Evade CTR Reporting | SOFT_HOLD_2HR | BLOCK_ACCOUNT | Yes |
-| **CASE_19** | False Alarm - Recurring Annual Insurance | Potential False Positive / Legitimate Unusual Activity | SOFT_HOLD_2HR | ALLOW_TRANSACTION | No |
-| **CASE_20** | Sophisticated Multi-Hop Bust-Out with Stolen ID | Bust-Out / First-Party Credit Depletion | SOFT_HOLD_2HR | BLOCK_ACCOUNT | Yes |
+| **HHG-001** | Multi-Card Velocity Spike on Mobile Device | Device Spoofing & Emulator Farm | BLOCK_CARD | BLOCK_CARD | Yes |
+| **HHG-002** | Synthetic Identity Ring Across 4 Accounts | Synthetic Identity Fraud Ring | SOFT_HOLD_2HR | BLOCK_ACCOUNT | Yes |
+| **HHG-003** | Impossible Velocity - NY to London (45 min) | Rapid Geolocation Shift & Impossible Travel | BLOCK_CARD | BLOCK_CARD | No |
+| **HHG-004** | Automated Emulator Farm Checkout Burst | Device Spoofing & Emulator Farm | BLOCK_CARD | BLOCK_CARD | No |
+| **HHG-005** | Bust-Out Spree on Dormant Platinum ($14.2k) | Bust-Out / First-Party Credit Depletion | SOFT_HOLD_2HR | BLOCK_ACCOUNT | Yes |
+| **HHG-006** | High-Risk Proxy Card Testing Micro-Txs | Card-Not-Present Credential Stuffing & ATO | REQUEST_STEP_UP_AUTH | BLOCK_CARD | No |
+| **HHG-007** | Legitimate High-Value Traveler (VIP Test) | Potential False Positive / Legitimate Unusual Activity | SOFT_HOLD_2HR | ALLOW_TRANSACTION | No |
+| **HHG-008** | Coordinated ATO with Contact Details Change | Card-Not-Present Credential Stuffing & ATO | SOFT_HOLD_2HR | BLOCK_ACCOUNT | Yes |
+| **HHG-009** | Multiple Cards Tested Rapidly Across Subnet | Device Spoofing & Emulator Farm | BLOCK_CARD | BLOCK_CARD | No |
+| **HHG-010** | Uncertain First-Time Electronics Purchase | Anomalous Spending - Insufficient Typology Match | REQUEST_STEP_UP_AUTH | BLOCK_CARD | No |
+| **HHG-011** | Stolen Card Used on Newly Minted Account | Card-Not-Present Credential Stuffing & ATO | SOFT_HOLD_2HR | BLOCK_CARD | Yes |
+| **HHG-012** | Shared IP Subnet Linking 5 Fraudulent Loans | Synthetic Identity Fraud Ring | BLOCK_CARD | BLOCK_CARD | Yes |
+| **HHG-013** | Middle-of-the-Night ATM Withdrawal Attempt | Card-Not-Present Credential Stuffing & ATO | SOFT_HOLD_2HR | BLOCK_CARD | No |
+| **HHG-014** | Legitimate Payroll Bonus Deposit | Potential False Positive / Legitimate Unusual Activity | REQUEST_STEP_UP_AUTH | ALLOW_TRANSACTION | No |
+| **HHG-015** | Cross-Border Remittance to High-Risk Jurisdiction | Rapid Geolocation Shift & Impossible Travel | BLOCK_CARD | BLOCK_CARD | Yes |
+| **HHG-016** | Bursty In-App Game Currency Purchases | Card-Not-Present Credential Stuffing & ATO | REQUEST_STEP_UP_AUTH | BLOCK_CARD | No |
+| **HHG-017** | Commercial Credit Card Dump Testing on SaaS | Card-Not-Present Credential Stuffing & ATO | REQUEST_STEP_UP_AUTH | BLOCK_CARD | No |
+| **HHG-018** | Structuring Pattern Evading $10,000 CTR | Structuring / Smurfing to Evade CTR Reporting | SOFT_HOLD_2HR | BLOCK_ACCOUNT | Yes |
+| **HHG-019** | False Alarm - Recurring Annual Insurance | Potential False Positive / Legitimate Unusual Activity | SOFT_HOLD_2HR | ALLOW_TRANSACTION | No |
+| **HHG-020** | Sophisticated Multi-Hop Bust-Out with Stolen ID | Bust-Out / First-Party Credit Depletion | SOFT_HOLD_2HR | BLOCK_ACCOUNT | Yes |
 
 ---
 
@@ -160,7 +161,7 @@ TG_SECRET=your_graph_secret
 
 - [x] **Working Agent**: LangGraph state machine with cyclic evidence gathering and TigerGraph memory.
 - [x] **GitHub Repository Ready**: Modular directory structure, clean commits, and complete documentation.
-- [x] **20 Benchmark Answer Files**: Generated in `submissions/case_01.json` through `submissions/case_20.json`.
+- [x] **20 Benchmark Answer Files**: Generated in `cases/HHG-001.json` through `cases/HHG-020.json` (and mirrored in `submissions/`).
 - [x] **Dual NBA Tracking**: Pre-evidence and post-evidence actions with required approval routes.
 - [x] **TigerGraph Ingestion**: Graph schema, installed queries, and CaseMemory vector updates.
 - [x] **FinCEN SAR Generation**: Form 111 narratives meeting 31 CFR 1020.320 guidelines.
