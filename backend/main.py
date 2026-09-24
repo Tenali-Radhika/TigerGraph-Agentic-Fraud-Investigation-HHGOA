@@ -246,6 +246,26 @@ def get_policies_and_patterns():
     """Returns banking policies, known fraud typologies, and authority matrix."""
     return policy_engine.policies_data
 
+from tigergraph.mcp_server import tigergraph_mcp
+
+class MCPCallRequest(BaseModel):
+    name: str
+    arguments: Dict[str, Any] = {}
+
+@app.get("/api/mcp/tools")
+def list_mcp_tools():
+    """Returns Model Context Protocol (MCP) tool schemas exposed to AI agents."""
+    return {"tools": tigergraph_mcp.list_tools()}
+
+@app.post("/api/mcp/call")
+def execute_mcp_tool(req: MCPCallRequest):
+    """Executes a tool call according to the Model Context Protocol specification."""
+    try:
+        res = tigergraph_mcp.call_tool(req.name, req.arguments)
+        return {"result": res, "isError": False}
+    except Exception as e:
+        return {"error": str(e), "isError": True}
+
 class GraphRAGQuery(BaseModel):
     query: str
     case_id: Optional[str] = None
